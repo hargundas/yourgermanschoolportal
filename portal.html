@@ -1,0 +1,3365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unified Management Portal | YourGermanSchool (YGS)</title>
+  <meta name="description" content="Single login portal for Students, Teachers, and Admin at YourGermanSchool." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --navy-dark:#0f172a;--navy-primary:#1e293b;--navy-light:#334155;
+      --accent-gold:#c59b27;--green:#15803d;--red:#991b1b;
+      --bg-page:#f8fafc;--bg-section:#f1f5f9;
+      --text-muted:#64748b;
+      --border-subtle:#e2e8f0;--border-strong:#cbd5e1;
+      --shadow-sm:0 2px 4px rgba(15,23,42,.04);
+      --shadow-md:0 10px 25px -5px rgba(15,23,42,.08);
+      --shadow-lg:0 20px 30px -10px rgba(15,23,42,.12);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',-apple-system,sans-serif;}
+    body{background:var(--bg-page);color:#334155;line-height:1.6;font-size:14px;}
+    .strip{height:4px;background:linear-gradient(90deg,#000 0%,var(--red) 50%,var(--accent-gold) 100%);}
+    .top-bar{background:var(--navy-dark);color:#cbd5e1;font-size:13px;padding:8px 0;}
+    .container{max-width:1250px;margin:0 auto;padding:0 24px;}
+    header{background:#fff;position:sticky;top:0;z-index:1000;border-bottom:1px solid var(--border-subtle);box-shadow:var(--shadow-sm);}
+    .nav-wrap{display:flex;justify-content:space-between;align-items:center;padding:14px 0;}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+    .brand img{height:44px;}
+    .brand-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--navy-dark);}
+    .brand-sub{font-size:11px;color:var(--accent-gold);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+    nav ul{display:flex;align-items:center;gap:24px;list-style:none;}
+    nav a{color:var(--navy-primary);text-decoration:none;font-weight:600;font-size:14px;}
+    .nav-active{background:var(--navy-dark);color:#fff!important;padding:8px 18px;border-radius:20px;}
+    /* LOGIN */
+    .login-wrap{padding:70px 0 90px;}
+    .login-card{max-width:440px;margin:0 auto;background:#fff;border:1px solid var(--border-subtle);border-radius:12px;box-shadow:var(--shadow-lg);padding:36px;}
+    .form-group{margin-bottom:18px;}
+    .form-label{font-size:13px;font-weight:700;color:var(--navy-dark);margin-bottom:6px;display:block;}
+    .form-input,.form-select{width:100%;padding:12px 16px;border:1px solid var(--border-strong);border-radius:6px;font-size:14px;outline:none;transition:border-color .2s;}
+    .form-input:focus,.form-select:focus{border-color:var(--navy-dark);}
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;border:none;text-decoration:none;transition:all .25s ease;position:relative;overflow:hidden;}
+    .btn:disabled{opacity:.7;cursor:not-allowed;}
+    .btn-navy{background:var(--navy-dark);color:#fff;}
+    .btn-navy:hover:not(:disabled){background:var(--navy-light);}
+    .btn-green{background:var(--green);color:#fff;}
+    .btn-green:hover:not(:disabled){background:#166534;}
+    .btn-red{background:var(--red);color:#fff;}
+    .btn-gold{background:var(--accent-gold);color:var(--navy-dark);}
+    .btn-outline{background:transparent;border:1px solid var(--border-strong);color:var(--navy-primary);}
+    .btn-orange{background:#d97706;color:#fff;}
+    /* SPINNER */
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    /* FULL PAGE LOADER */
+    #pageLoader{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+    #pageLoader.show{display:flex;}
+    .page-spinner-box{background:#fff;border-radius:12px;padding:28px 36px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:var(--shadow-lg);}
+    .page-spinner{width:44px;height:44px;border:4px solid #e2e8f0;border-top-color:var(--navy-dark);border-radius:50%;animation:spin .75s linear infinite;}
+    .page-spinner-text{font-weight:700;font-size:14px;color:var(--navy-dark);}
+    /* ALERT */
+    .alert-box{display:none;padding:14px 18px;border-radius:6px;font-weight:600;font-size:13px;margin-bottom:18px;line-height:1.5;}
+    .alert-error{background:#fef2f2;border:1px solid #fecaca;color:var(--red);}
+    /* DASHBOARDS */
+    .dashboard{display:none;padding:40px 0 80px;}
+    .dash-banner{background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy-primary) 100%);color:#fff;border-radius:12px;padding:32px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;margin-bottom:30px;}
+    .kpi-card{background:#fff;border:1px solid var(--border-subtle);border-radius:8px;padding:24px;box-shadow:var(--shadow-sm);}
+    .kpi-val{font-size:26px;font-weight:800;color:var(--navy-dark);min-height:32px;}
+    .kpi-lbl{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-top:4px;}
+    .tab-bar{display:flex;gap:12px;margin-bottom:24px;border-bottom:2px solid var(--bg-section);padding-bottom:16px;flex-wrap:wrap;}
+    .tab-btn{padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;border:1px solid var(--border-strong);background:var(--bg-page);color:var(--navy-light);cursor:pointer;transition:all .25s ease;}
+    .tab-btn.active{background:var(--navy-dark);color:#fff;border-color:var(--navy-dark);}
+    .section-card{background:#fff;border:1px solid var(--border-subtle);border-radius:10px;padding:28px;margin-bottom:30px;box-shadow:var(--shadow-sm);}
+    .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--bg-section);}
+    .section-title{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy-dark);}
+    table.t{width:100%;border-collapse:collapse;font-size:13px;}
+    table.t th{background:var(--navy-dark);color:#fff;padding:12px 16px;text-align:left;}
+    table.t td{padding:14px 16px;border-bottom:1px solid var(--border-subtle);vertical-align:middle;}
+    .badge{padding:4px 10px;border-radius:12px;font-weight:700;font-size:11px;}
+    .badge-pending{background:#fef3c7;color:#92400e;}
+    .badge-approved{background:#dcfce7;color:#166534;}
+    .badge-deactivated{background:#fef2f2;color:var(--red);}
+    /* MODALS */
+    .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,.6);z-index:2000;align-items:center;justify-content:center;}
+    .modal{background:#fff;border-radius:12px;max-width:560px;width:90%;padding:30px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
+    footer{background:var(--navy-dark);color:#cbd5e1;padding:30px 0 20px;border-top:3px solid var(--accent-gold);}
+    .empty-row td{text-align:center;color:var(--text-muted);padding:28px!important;font-style:italic;}
+  </style>
+</head>
+<body>
+
+<!-- FULL PAGE LOADER -->
+<div id="pageLoader">
+  <div class="page-spinner-box">
+    <div class="page-spinner"></div>
+    <div class="page-spinner-text" id="loaderText">Please wait...</div>
+  </div>
+</div>
+
+<div class="strip"></div>
+<div class="top-bar">
+  <div class="container" style="display:flex;justify-content:space-between;">
+    <span><i class="fa-solid fa-phone" style="color:var(--accent-gold);"></i> Admissions: +92 303 5580150</span>
+    <span><i class="fa-solid fa-shield-halved" style="color:var(--accent-gold);"></i> Unified YGS Authentication Portal</span>
+  </div>
+</div>
+
+<header>
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="ygs_logo.png" alt="YGS Logo">
+      <div><div class="brand-title">YourGermanSchool</div><span class="brand-sub">Let's Communicate &bull; A1 - B2</span></div>
+    </a>
+    <!-- NAV MENU: Visible ONLY when logged out -->
+    <nav id="mainNav"><ul>
+      <li><a href="index.html#about">About YGS</a></li>
+      <li><a href="index.html#programs">Courses</a></li>
+      <li><a href="practice.html">Practice Hub</a></li>
+      <li><a href="register.html"><i class="fa-solid fa-user-plus"></i> Register</a></li>
+      <li><a href="portal.html" class="nav-active"><i class="fa-solid fa-right-to-bracket"></i> Portal Login</a></li>
+    </ul></nav>
+    <!-- USER BADGE & SIGN OUT: Visible ONLY when logged in -->
+    <div id="logoutBtn" style="display:none;align-items:center;gap:14px;">
+      <span style="font-weight:700;color:var(--navy-dark);font-size:13px;display:flex;align-items:center;gap:6px;">
+        <i class="fa-solid fa-circle-user" style="color:var(--accent-gold);font-size:18px;"></i>
+        <span id="navUserName">User</span>
+      </span>
+      <button onclick="portalLogout()" class="btn btn-navy" style="font-size:12px;padding:6px 14px;width:auto;">
+        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginSection">
+  <div class="container">
+    <div class="login-card">
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;color:var(--navy-dark);text-align:center;margin-bottom:6px;">Portal Sign In</h2>
+      <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-bottom:20px;">Single portal for Students, Teachers &amp; Admin.</p>
+      <div id="loginAlert" class="alert-box alert-error"></div>
+      <form onsubmit="handleLogin(event)" autocomplete="off" id="loginForm">
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="Enter your registered email" autocomplete="off" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" autocomplete="new-password" required>
+        </div>
+        <button type="submit" id="loginBtn" class="btn btn-navy" style="width:100%;margin-top:10px;">
+          <i class="fa-solid fa-right-to-bracket"></i> Authenticate &amp; Sign In
+        </button>
+      </form>
+      <div style="margin-top:20px;text-align:center;font-size:13px;">
+        New Student? <a href="register.html" style="color:var(--accent-gold);font-weight:700;text-decoration:none;">Register Profile Here</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="dashboard" id="adminSection">
+  <div class="container">
+    <div class="dash-banner">
+      <div>
+        <span style="background:rgba(197,155,39,.2);color:var(--accent-gold);padding:4px 12px;border-radius:12px;font-weight:800;font-size:11px;">SUPER ADMIN CONTROL PANEL</span>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;margin-top:6px;">YGS Administration Portal</h1>
+        <p style="color:#94a3b8;">Manage students, teachers, classes and attendance records.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="openClassModal()" class="btn" style="background:#fff;color:var(--navy-dark);width:auto;"><i class="fa-solid fa-calendar-plus"></i> + Add Batch</button>
+        <button onclick="openTeacherModal()" class="btn btn-gold" style="width:auto;"><i class="fa-solid fa-user-plus"></i> + Add Teacher</button>
+      </div>
+    </div>
+    <!-- TEACHER OFF-DAY & SUBSTITUTION REQUESTS SECTION -->
+    <div class="section-card" id="adminOffDayCard" style="display:none; margin-bottom:20px; border-left:4px solid var(--accent-gold);">
+      <div class="section-head" style="margin-bottom:10px;">
+        <h3 class="section-title"><i class="fa-solid fa-user-clock" style="color:var(--accent-gold);"></i> Teacher Off-Day &amp; Substitution Requests</h3>
+      </div>
+      <div id="adminOffDayContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-val" id="kpiPending">0</div><div class="kpi-lbl" style="color:#92400e;">Pending Approvals</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpiStudents">0</div><div class="kpi-lbl" style="color:var(--green);">Total Students</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpiTeachers">0</div><div class="kpi-lbl">Faculty Teachers</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpiBatches">0</div><div class="kpi-lbl">Active Batches</div></div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('pendingTab',this)"><i class="fa-solid fa-hourglass-half"></i> Pending Approvals</button>
+      <button class="tab-btn" onclick="switchTab('studentsTab',this)"><i class="fa-solid fa-users"></i> All Students</button>
+      <button class="tab-btn" onclick="switchTab('teachersTab',this)"><i class="fa-solid fa-chalkboard-user"></i> Faculty Teachers</button>
+      <button class="tab-btn" onclick="switchTab('batchesTab',this)"><i class="fa-solid fa-layer-group"></i> Batches &amp; Classes</button>
+      <button class="tab-btn" onclick="switchTab('adminAttendanceTab',this)"><i class="fa-solid fa-clipboard-check"></i> Attendance Summary</button>
+    </div>
+    <div class="section-card tab-content" id="pendingTab">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-hourglass-half" style="color:#d97706;"></i> Pending Enrollment Requests</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Students cannot log in until approved.</span>
+      </div>
+      <table class="t"><thead><tr><th>Name &amp; Email</th><th>Phone</th><th>Course</th><th>Fee Receipt</th><th>Status</th><th style="text-align:center;">Actions</th></tr></thead>
+      <tbody id="pendingTbody"></tbody></table>
+    </div>
+    <div class="section-card tab-content" id="studentsTab" style="display:none;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> All Students Directory</h3>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input type="text" id="adminStudentSearch" class="form-input" style="width:220px;padding:7px 12px;font-size:13px;" placeholder="&#128269; Search name or batch..." oninput="filterAdminStudents(this.value)">
+          <span style="font-size:12px;color:var(--text-muted);">Assign teacher, update batch, reset password.</span>
+        </div>
+      </div>
+      <table class="t"><thead><tr><th>Name &amp; Email</th><th>Course</th><th>Batch</th><th>Assigned Teacher</th><th>Status</th><th style="text-align:center;">Actions</th></tr></thead>
+      <tbody id="allStudentsTbody"></tbody></table>
+    </div>
+    <div class="section-card tab-content" id="teachersTab" style="display:none;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-chalkboard-user" style="color:var(--accent-gold);"></i> Faculty Teacher Directory</h3>
+        <button onclick="openTeacherModal()" class="btn btn-navy" style="font-size:11px;padding:6px 14px;width:auto;"><i class="fa-solid fa-plus"></i> Add Teacher</button>
+      </div>
+      <table class="t"><thead><tr><th>Name &amp; Email</th><th>Qualification</th><th>Assigned Course</th><th>Specialization</th><th>Status</th><th style="text-align:center;">Actions</th></tr></thead>
+      <tbody id="teachersTbody"></tbody></table>
+    </div>
+    <div class="section-card tab-content" id="batchesTab" style="display:none;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> Active Batches &amp; Classes</h3>
+        <button onclick="openClassModal()" class="btn btn-navy" style="font-size:11px;padding:6px 14px;width:auto;"><i class="fa-solid fa-plus"></i> Add Batch</button>
+      </div>
+      <table class="t"><thead><tr><th>Batch</th><th>Course</th><th>Instructor</th><th>Schedule</th><th>Meet Link</th><th style="text-align:center;">Action</th></tr></thead>
+      <tbody id="batchesTbody"></tbody></table>
+    </div>
+    <div class="section-card tab-content" id="adminAttendanceTab" style="display:none;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-check" style="color:var(--accent-gold);"></i> Live Class Attendance Master Summary</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Real-time check-in records logged dynamically when students join live classes.</span>
+      </div>
+      <table class="t"><thead><tr><th>Student Name &amp; Email</th><th>Course</th><th>Batch</th><th>Check-In Date &amp; Time</th><th>Status</th></tr></thead>
+      <tbody id="adminAttendanceTbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- TEACHER DASHBOARD -->
+<div class="dashboard" id="teacherSection">
+  <div class="container">
+    <div class="dash-banner">
+      <div>
+        <span style="background:rgba(197,155,39,.2);color:var(--accent-gold);padding:4px 12px;border-radius:12px;font-weight:800;font-size:11px;">FACULTY INSTRUCTOR DASHBOARD</span>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;margin-top:6px;">Guten Tag, <span id="tName">Teacher</span>!</h1>
+        <p style="color:#94a3b8;">Assigned Course: <strong style="color:var(--accent-gold);" id="tCourse">German Language</strong></p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button onclick="openBatchAttendanceModal()" class="btn btn-navy" style="width:auto; padding:10px 18px;">
+          <i class="fa-solid fa-clipboard-check"></i> Launch Class Attendance
+        </button>
+        <button onclick="openHomeworkModal()" class="btn btn-gold" style="width:auto; padding:10px 18px;">
+          <i class="fa-solid fa-plus"></i> + Create Homework
+        </button>
+      </div>
+    </div>
+    <!-- PENDING LEAVES SECTION -->
+    <div class="section-card" id="tPendingLeavesCard" style="display:none; margin-bottom:20px; border-left:4px solid var(--accent-gold);">
+      <div class="section-head" style="margin-bottom:10px;">
+        <h3 class="section-title" style="color:var(--navy-dark);"><i class="fa-solid fa-envelope-open-text" style="color:var(--accent-gold);"></i> Pending Student Leave Requests</h3>
+      </div>
+      <div id="tPendingLeavesContainer" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-user" style="color:var(--accent-gold);"></i> Students Assigned To You</h3>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <input type="text" id="rosterSearch" class="form-input" style="width:220px;padding:7px 12px;font-size:13px;" placeholder="&#128269; Search by name or batch..." oninput="filterRoster(this.value)">
+          <span style="font-size:12px;color:var(--text-muted);"id="rosterCount"></span>
+        </div>
+      </div>
+      <table class="t"><thead><tr><th>Name &amp; Email</th><th>Batch</th><th>Course</th><th>Attendance Rate</th><th>Teacher Remarks</th><th style="text-align:center;">Profile</th></tr></thead>
+      <tbody id="rosterTbody"></tbody></table>
+    </div>
+
+    <!-- TEACHER HOMEWORK CARD -->
+    <div class="section-card" style="margin-top:30px;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-file-pen" style="color:var(--accent-gold);"></i> Manage Homework &amp; Assignments</h3>
+        <button onclick="openHomeworkModal()" class="btn btn-gold" style="font-size:11px;padding:6px 14px;width:auto;"><i class="fa-solid fa-plus"></i> Create Homework</button>
+      </div>
+      <table class="t"><thead><tr><th>Assignment Title</th><th>Target Course</th><th>Due Date &amp; Time</th><th style="text-align:center;">Action</th></tr></thead>
+      <tbody id="teacherHwTbody"></tbody></table>
+    </div>
+
+    <!-- TEACHER TIMETABLE CARD -->
+    <div class="section-card" id="teacherTimetableCard" style="display:none;margin-top:30px;">
+      <div class="section-head" style="margin-bottom:12px;">
+        <h3 class="section-title"><i class="fa-solid fa-calendar-week" style="color:var(--accent-gold);"></i> Your Weekly Timetable</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Schedules and timings of assigned batches you teach.</span>
+      </div>
+      <div id="teacherTimetableBox" style="display:flex; flex-direction:column; gap:16px;"></div>
+    </div>
+
+    <!-- TEACHER ATTENDANCE SUMMARY CARD -->
+    <div class="section-card" style="margin-top:30px;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-check" style="color:var(--accent-gold);"></i> Live Class Attendance Check-Ins</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Recorded automatically when assigned students launch the live meeting link.</span>
+      </div>
+      <table class="t"><thead><tr><th>Student Name &amp; Email</th><th>Course</th><th>Batch</th><th>Check-In Date &amp; Time</th><th>Status</th></tr></thead>
+      <tbody id="teacherAttendanceTbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT DASHBOARD -->
+<div class="dashboard" id="studentSection">
+  <div class="container">
+    <div class="dash-banner">
+      <div>
+        <span style="background:rgba(197,155,39,.2);color:var(--accent-gold);padding:4px 12px;border-radius:12px;font-weight:800;font-size:11px;">ENROLLED STUDENT DASHBOARD</span>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;margin-top:6px;">Willkommen, <span id="sName">Student</span>!</h1>
+        <p style="color:#94a3b8;">Course: <strong style="color:var(--accent-gold);" id="sCourse">German Language</strong></p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="viewOwnProfile()" class="btn btn-gold" style="width:auto;font-size:14px;padding:12px 22px;">
+          <i class="fa-solid fa-calendar-days"></i> Academic Profile &amp; Calendar
+        </button>
+        <button onclick="promptStudentAttendance()" class="btn btn-green" style="width:auto;font-size:14px;padding:12px 22px;">
+          <i class="fa-solid fa-video"></i> Join Live Class
+        </button>
+        <button onclick="openRequestLeaveModal()" class="btn btn-navy" style="width:auto;font-size:14px;padding:12px 22px;">
+          <i class="fa-solid fa-envelope-open-text"></i> Request Leave
+        </button>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-lbl">Assigned Batch</div><div class="kpi-val" id="sBatch" style="font-size:18px;">Not Assigned</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">Assigned Instructor</div><div class="kpi-val" id="sTeacher" style="font-size:18px;">Not Assigned</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">Attendance Rate</div><div class="kpi-val" id="sAttendance" style="color:var(--green);">100%</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">Teacher Remarks</div><div class="kpi-val" id="sRemarks" style="font-size:14px;color:var(--accent-gold);">No remarks yet.</div></div>
+    </div>
+    <!-- STUDENT TIMETABLE CARD -->
+    <div class="section-card" id="studentTimetableCard" style="display:none;margin-top:20px;">
+      <div class="section-head" style="margin-bottom:12px;">
+        <h3 class="section-title"><i class="fa-solid fa-calendar-week" style="color:var(--accent-gold);"></i> Visual Class Timetable</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Weekly schedules of active class sessions and off days.</span>
+      </div>
+      <div id="studentTimetableBox"></div>
+    </div>
+    <div class="section-card">
+      <div class="section-head"><h3 class="section-title"><i class="fa-solid fa-file-pen" style="color:var(--accent-gold);"></i> Homework &amp; Assignments</h3></div>
+      <table class="t"><thead><tr><th>Assignment Title</th><th>Due Date</th><th>Status</th><th>Teacher Remarks</th><th>Action</th></tr></thead>
+      <tbody id="hwTbody"></tbody></table>
+    </div>
+
+    <!-- STUDENT ATTENDANCE HISTORY SUMMARY -->
+    <div class="section-card" style="margin-top:30px;">
+      <div class="section-head">
+        <h3 class="section-title"><i class="fa-solid fa-clipboard-check" style="color:var(--accent-gold);"></i> Your Live Class Attendance History</h3>
+        <span style="font-size:12px;color:var(--text-muted);">Logged dynamically whenever you join live classes.</span>
+      </div>
+      <table class="t"><thead><tr><th>Check-In Date &amp; Time</th><th>Course</th><th>Batch</th><th>Status</th></tr></thead>
+      <tbody id="studentAttendanceTbody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Class Attendance Check-In Prompt -->
+<div class="overlay" id="attendanceModal">
+  <div class="modal" style="max-width:480px;text-align:center;padding:32px;">
+    <div style="width:64px;height:64px;background:rgba(21,128,61,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <i class="fa-solid fa-clipboard-user" style="font-size:30px;color:var(--green);"></i>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy-dark);margin-bottom:6px;">Class Attendance Check-In</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Confirm your attendance to proceed to the live class meeting link.</p>
+    
+    <div style="background:var(--bg-section);padding:18px;border-radius:8px;text-align:left;font-size:13px;margin-bottom:24px;line-height:1.9;border:1px solid var(--border-subtle);">
+      <div><strong>Student Name:</strong> <span id="attStudentName" style="color:var(--navy-dark);font-weight:700;">-</span></div>
+      <div><strong>Course Level:</strong> <span id="attCourse" style="color:var(--navy-dark);">-</span></div>
+      <div><strong>Batch:</strong> <span id="attBatch" style="color:var(--navy-dark);font-weight:700;">-</span></div>
+      <div><strong>Check-In Time:</strong> <span id="attDateTime" style="color:var(--green);font-weight:700;">-</span></div>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button type="button" onclick="closeOverlay('attendanceModal')" class="btn btn-outline" style="width:40%;">Cancel</button>
+      <button type="button" onclick="confirmAttendanceAndLaunch()" id="confirmAttBtn" class="btn btn-green" style="width:60%;padding:12px;"><i class="fa-solid fa-check-circle"></i> Mark Present &amp; Join</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Approve / Edit Student -->
+<div class="overlay" id="studentModal">
+  <div class="modal">
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Assign Teacher &amp; Update Student</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px;">Updating: <strong id="sModalName">Student</strong></p>
+    <form onsubmit="submitStudentModal(event)">
+      <input type="hidden" id="sModalId">
+      <div class="form-group"><label class="form-label">Assign Batch *</label><select id="sModalBatch" class="form-select" required onchange="autofillStudentBatchDetails()"></select></div>
+      <div class="form-group"><label class="form-label">Assign Teacher *</label><select id="sModalTeacher" class="form-select" required></select></div>
+      <div class="form-group"><label class="form-label">New Password (leave blank to keep)</label><input type="password" id="sModalPassword" class="form-input" autocomplete="new-password" placeholder="Leave blank to keep current"></div>
+      <div class="form-group"><label class="form-label">Schedule *</label><input type="text" id="sModalSchedule" class="form-input" required></div>
+      <div class="form-group"><label class="form-label">Google Meet Link *</label><input type="url" id="sModalMeet" class="form-input" required></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" onclick="closeOverlay('studentModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveStudentBtn" class="btn btn-green" style="width:auto;"><i class="fa-solid fa-floppy-disk"></i> Save to Database</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Create / Edit Teacher -->
+<div class="overlay" id="teacherModal">
+  <div class="modal" style="max-width: 650px;">
+    <h3 id="tModalTitle" style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Add Teacher Profile</h3>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:18px;">All fields saved directly to the database.</p>
+    <form onsubmit="submitTeacherModal(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <input type="hidden" id="tModalId">
+      <div class="form-group" style="grid-column:span 2;"><label class="form-label">Full Name *</label><input type="text" id="tModalName" class="form-input" required></div>
+      <div class="form-group"><label class="form-label">Email Address *</label><input type="email" id="tModalEmail" class="form-input" required></div>
+      <div class="form-group"><label class="form-label">Password *</label><input type="password" id="tModalPass" class="form-input" autocomplete="new-password" required></div>
+      <div class="form-group">
+        <label class="form-label">Assign Course Level *</label>
+        <select id="tModalCourse" class="form-select" required>
+          <option value="German A1 - Foundational">German A1 - Foundational</option>
+          <option value="German A2 - Elementary">German A2 - Elementary</option>
+          <option value="German B1 - Intermediate">German B1 - Intermediate</option>
+          <option value="German B2 - Advanced Professional">German B2 - Advanced Professional</option>
+          <option value="German C1 - Native Mastery">German C1 - Native Mastery</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Qualification *</label><input type="text" id="tModalQual" class="form-input" required></div>
+      <div class="form-group" style="grid-column:span 2;"><label class="form-label">Specialization</label><input type="text" id="tModalSpec" class="form-input"></div>
+      
+      <!-- Assign Batches checkboxes list -->
+      <div class="form-group" style="grid-column:span 2;">
+        <label class="form-label"><i class="fa-solid fa-layer-group" style="color:var(--accent-gold);"></i> Assign Batches to Teacher</label>
+        <div id="tModalBatchesContainer" style="background:var(--bg-section); border:1px solid var(--border-subtle); border-radius:8px; padding:12px; max-height:130px; overflow-y:auto; display:grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap:8px;">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;grid-column:span 2;">
+        <button type="button" onclick="closeOverlay('teacherModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveTeacherBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-user-plus"></i> Save Teacher</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Create Batch -->
+<div class="overlay" id="batchModal">
+  <div class="modal" style="max-width: 680px;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Create New Batch</h3>
+    <form onsubmit="submitBatchModal(event)" style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <div class="form-group" style="grid-column:span 2;"><label class="form-label">Batch Number *</label><input type="text" id="bModalBatch" class="form-input" placeholder="e.g. YGS-B1-2026-01" required></div>
+      <div class="form-group">
+        <label class="form-label">Course Level *</label>
+        <select id="bModalCourse" class="form-select" required>
+          <option value="German A1 - Foundational">German A1 - Foundational</option>
+          <option value="German A2 - Elementary">German A2 - Elementary</option>
+          <option value="German B1 - Intermediate">German B1 - Intermediate</option>
+          <option value="German B2 - Advanced Professional">German B2 - Advanced Professional</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Instructor *</label><select id="bModalTeacher" class="form-select" required></select></div>
+      
+      <!-- Visual Scheduler Config -->
+      <div class="form-group" style="grid-column: span 1;">
+        <label class="form-label"><i class="fa-solid fa-calendar-week" style="color:var(--accent-gold);"></i> Timetable Config *</label>
+        <div style="background:var(--bg-section); border:1px solid var(--border-subtle); border-radius:8px; padding:12px; font-size:12px;">
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:700;">
+              <input type="radio" name="bModalTimeConfig" id="bTimeConfigSame" value="same" checked onchange="toggleBatchTimeConfig()"> Same timing for all days
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:700;">
+              <input type="radio" name="bModalTimeConfig" id="bTimeConfigDiff" value="diff" onchange="toggleBatchTimeConfig()"> Different timing for each day
+            </label>
+          </div>
+          <div id="bGlobalTimeRow" style="display:flex; align-items:center; gap:6px; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1;">
+            <span style="font-weight:700;">Class Time:</span>
+            <input type="time" id="bGlobalTime" class="form-input" style="width:105px; padding:4px 8px; font-size:13px;" value="19:00" onchange="applyGlobalTimeToActiveDays()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Select Class Days & Times -->
+      <div class="form-group" style="grid-column: span 1;">
+        <label class="form-label"><i class="fa-solid fa-calendar-days" style="color:var(--accent-gold);"></i> Select Class Days &amp; Times *</label>
+        <div id="bDaysContainer" style="display:flex; flex-direction:column; gap:6px; background:var(--bg-section); border:1px solid var(--border-subtle); border-radius:8px; padding:10px; max-height:240px; overflow-y:auto;">
+          <!-- Monday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Monday" checked onchange="toggleDayActive('Monday')"> Mon
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-approved" id="badge_Monday" style="padding:2px 6px; font-size:10px;">Class</span>
+              <input type="time" class="day-time-input form-input" id="time_Monday" style="width:90px; padding:2px 6px; font-size:12px;" value="19:00">
+            </div>
+          </div>
+          <!-- Tuesday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Tuesday" checked onchange="toggleDayActive('Tuesday')"> Tue
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-approved" id="badge_Tuesday" style="padding:2px 6px; font-size:10px;">Class</span>
+              <input type="time" class="day-time-input form-input" id="time_Tuesday" style="width:90px; padding:2px 6px; font-size:12px;" value="19:00">
+            </div>
+          </div>
+          <!-- Wednesday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Wednesday" checked onchange="toggleDayActive('Wednesday')"> Wed
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-approved" id="badge_Wednesday" style="padding:2px 6px; font-size:10px;">Class</span>
+              <input type="time" class="day-time-input form-input" id="time_Wednesday" style="width:90px; padding:2px 6px; font-size:12px;" value="19:00">
+            </div>
+          </div>
+          <!-- Thursday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Thursday" checked onchange="toggleDayActive('Thursday')"> Thu
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-approved" id="badge_Thursday" style="padding:2px 6px; font-size:10px;">Class</span>
+              <input type="time" class="day-time-input form-input" id="time_Thursday" style="width:90px; padding:2px 6px; font-size:12px;" value="19:00">
+            </div>
+          </div>
+          <!-- Friday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Friday" onchange="toggleDayActive('Friday')"> Fri
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-pending" id="badge_Friday" style="padding:2px 6px; font-size:10px; background:#e2e8f0; color:#64748b;">Off Day</span>
+              <input type="time" class="day-time-input form-input" id="time_Friday" style="width:90px; padding:2px 6px; font-size:12px; visibility:hidden;" value="19:00">
+            </div>
+          </div>
+          <!-- Saturday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Saturday" onchange="toggleDayActive('Saturday')"> Sat
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-pending" id="badge_Saturday" style="padding:2px 6px; font-size:10px; background:#e2e8f0; color:#64748b;">Off Day</span>
+              <input type="time" class="day-time-input form-input" id="time_Saturday" style="width:90px; padding:2px 6px; font-size:12px; visibility:hidden;" value="19:00">
+            </div>
+          </div>
+          <!-- Sunday -->
+          <div class="day-row" style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; gap:8px;">
+            <label style="display:flex; align-items:center; gap:6px; font-weight:700; cursor:pointer; font-size:12px; margin:0;">
+              <input type="checkbox" class="day-chk" data-day="Sunday" onchange="toggleDayActive('Sunday')"> Sun
+            </label>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="badge badge-pending" id="badge_Sunday" style="padding:2px 6px; font-size:10px; background:#e2e8f0; color:#64748b;">Off Day</span>
+              <input type="time" class="day-time-input form-input" id="time_Sunday" style="width:90px; padding:2px 6px; font-size:12px; visibility:hidden;" value="19:00">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group" style="grid-column: span 1;"><label class="form-label">Start Date *</label><input type="date" id="bModalStart" class="form-input" required></div>
+      <div class="form-group" style="grid-column: span 1;">
+        <label class="form-label">Batch Base Timezone *</label>
+        <select id="bModalTimezone" class="form-select" required>
+          <option value="Asia/Karachi">Asia/Karachi (PKT - UTC+5)</option>
+          <option value="Europe/Berlin">Europe/Berlin (CET/CEST - UTC+1/UTC+2)</option>
+          <option value="UTC">Coordinated Universal Time (UTC)</option>
+        </select>
+      </div>
+      <div class="form-group" style="grid-column: span 1;"><label class="form-label">Google Meet Link *</label><input type="url" id="bModalMeet" class="form-input" placeholder="https://meet.google.com/..." required></div>
+      <div class="form-group" style="grid-column: span 1;"><label class="form-label">Late Limit (Minutes) *</label><input type="number" id="bModalLateLimit" class="form-input" min="1" value="10" required></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;grid-column: span 2;">
+        <button type="button" onclick="closeOverlay('batchModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveBatchBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-floppy-disk"></i> Save Batch</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Create Homework -->
+<div class="overlay" id="homeworkModal">
+  <div class="modal">
+    <h3 id="hwModalTitleLabel" style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Publish Homework Assignment</h3>
+    <form onsubmit="submitHomeworkModal(event)">
+      <input type="hidden" id="hwModalId">
+      <div class="form-group"><label class="form-label">Assignment Title *</label><input type="text" id="hwModalTitle" class="form-input" required></div>
+      <div class="form-group"><label class="form-label">Target Course *</label>
+        <select id="hwModalCourse" class="form-select" required>
+          <option value="German A1 - Foundational">German A1 - Foundational</option>
+          <option value="German A2 - Elementary">German A2 - Elementary</option>
+          <option value="German B1 - Intermediate">German B1 - Intermediate</option>
+          <option value="German B2 - Advanced Professional">German B2 - Advanced Professional</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Due Date &amp; Time *</label><input type="datetime-local" id="hwModalDue" class="form-input" required></div>
+      <div class="form-group">
+        <label class="form-label">Attach Reference File (PDF/Doc/Word/Image)</label>
+        <input type="file" id="hwModalFile" class="form-input" accept=".pdf,.docx,.doc,.txt,image/*">
+        <div id="hwAttachedLabel" style="font-size:11px; color:var(--green); font-weight:700; margin-top:4px;"></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+        <button type="button" onclick="closeOverlay('homeworkModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveHomeworkBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-paper-plane"></i> Publish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Create Timetable Poll -->
+<div class="overlay" id="createPollModal">
+  <div class="modal" style="max-width: 500px;">
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;">Propose Timetable Poll</h3>
+    <form onsubmit="submitCreatePoll(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="pModalBatch">
+      <div class="form-group">
+        <label class="form-label">Proposed Batch</label>
+        <input type="text" id="pModalBatchName" class="form-input" disabled style="background:#f1f5f9;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Proposed Timings Options (one per line) *</label>
+        <textarea id="pModalOptions" class="form-input" style="height:100px;" placeholder="e.g.&#10;Monday / Wednesday 18:00 (PKT)&#10;Monday / Wednesday 19:30 (PKT)&#10;Tuesday / Thursday 20:00 (PKT)" required></textarea>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+        <button type="button" onclick="closeOverlay('createPollModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="savePollBtn" class="btn btn-gold" style="width:auto;"><i class="fa-solid fa-square-poll-horizontal"></i> Launch Poll</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Vote Timetable Poll -->
+<div class="overlay" id="votePollModal" style="z-index: 10000;">
+  <div class="modal" style="max-width: 480px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+    <span style="background:rgba(197,155,39,.15); padding:3px 8px; border-radius:4px; font-weight:800; font-size:11px; color:var(--accent-gold);">TIMETABLE FEEDBACK POLL</span>
+    <h3 style="font-family:'Playfair Display',serif; font-size:20px; margin-top:8px; margin-bottom:4px;">Resolve Timetable Conflicts</h3>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Please select your preferred schedule option for Batch: <strong id="vModalBatchDisplay">...</strong></p>
+    <form onsubmit="submitVotePoll(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="vModalPollId">
+      <div class="form-group">
+        <label class="form-label">Select Timing Option *</label>
+        <div id="vModalOptionsContainer" style="display:flex; flex-direction:column; gap:8px; background:var(--bg-section); padding:10px; border-radius:8px; border:1px solid var(--border-subtle);">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Conflicts / Remarks Note (Optional)</label>
+        <textarea id="vModalRemarks" class="form-input" style="height:60px; font-size:12px;" placeholder="Explain any time conflicts or availability limits..."></textarea>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+        <button type="button" onclick="closeOverlay('votePollModal')" class="btn btn-outline" style="width:auto;">Skip / Vote Later</button>
+        <button type="submit" id="submitVoteBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-check"></i> Submit Vote</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: View Poll Remarks -->
+<div class="overlay" id="viewPollRemarksModal">
+  <div class="modal" style="max-width: 550px;">
+    <h3 style="font-family:'Playfair Display',serif; font-size:20px; margin-bottom:10px;">Student &amp; Teacher Remarks</h3>
+    <div id="pRemarksContainer" style="max-height: 300px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; margin-bottom:15px; padding-right:6px;">
+      <!-- Populated dynamically via JS -->
+    </div>
+    <div style="display:flex; justify-content:flex-end;">
+      <button type="button" onclick="closeOverlay('viewPollRemarksModal')" class="btn btn-navy" style="width:auto;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Request Leave -->
+<div class="overlay" id="requestLeaveModal">
+  <div class="modal" style="max-width: 450px;">
+    <h3 style="font-family:'Playfair Display',serif; font-size:22px; margin-bottom:8px;">Request Leave of Absence</h3>
+    <form onsubmit="submitRequestLeave(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <div class="form-group">
+        <label class="form-label">Leave Date *</label>
+        <input type="date" id="lModalDate" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Reason for Leave *</label>
+        <textarea id="lModalReason" class="form-input" style="height:80px;" placeholder="Describe why you need leave..." required></textarea>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+        <button type="button" onclick="closeOverlay('requestLeaveModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveLeaveBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-envelope"></i> Send Request</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Batch Class Attendance Marker -->
+<div class="overlay" id="batchAttendanceModal">
+  <div class="modal" style="max-width: 650px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:22px; margin:0;">Live Batch Attendance Sheet</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:2px;" id="bAttMeta">Mark attendance for today's live class session.</p>
+      </div>
+      <span class="badge badge-approved" id="bAttDateBadge">Today</span>
+    </div>
+    <form onsubmit="submitBatchAttendance(event)">
+      <div id="bAttStudentList" style="max-height:360px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-right:6px; margin-bottom:15px;">
+        <!-- Filled dynamically by JS -->
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button type="button" onclick="closeOverlay('batchAttendanceModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveBatchAttBtn" class="btn btn-green" style="width:auto;"><i class="fa-solid fa-floppy-disk"></i> Save Class Attendance</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Guided Onboarding Tour -->
+<div class="overlay" id="onboardingTourModal" style="z-index: 99999;">
+  <div class="modal" style="max-width: 580px; padding:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:10px; margin-bottom:15px;">
+      <h3 style="font-family:'Playfair Display',serif; font-size:22px; margin:0; color:var(--navy-dark);" id="tourTitle">Welcome to YGS Academic Portal</h3>
+      <span class="badge badge-gold" id="tourStepBadge">Step 1 of 4</span>
+    </div>
+    <div id="tourContent" style="min-height: 180px; font-size:13px; line-height:1.6; color:var(--text-muted);">
+      <!-- Slide content injected by JS -->
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; border-top:1px solid var(--border-subtle); padding-top:12px;">
+      <button type="button" id="tourPrevBtn" onclick="navigateTour(-1)" class="btn btn-outline" style="width:auto; padding:6px 14px; font-size:12px;"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="finishTour()" class="btn btn-outline" style="width:auto; padding:6px 14px; font-size:12px;">Skip Tour</button>
+        <button type="button" id="tourNextBtn" onclick="navigateTour(1)" class="btn btn-navy" style="width:auto; padding:6px 14px; font-size:12px;"><i class="fa-solid fa-arrow-right"></i> Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Student Homework Submission & File Upload -->
+<div class="overlay" id="studentSubmitHomeworkModal" style="z-index: 10000; display:none;">
+  <div class="modal" style="max-width: 500px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
+      <h3 style="font-family:'Playfair Display',serif; font-size:20px; margin:0; color:var(--navy-dark);" id="sSubModalTitle">Submit Assignment Solution</h3>
+      <button onclick="closeOverlay('studentSubmitHomeworkModal')" class="btn btn-outline" style="width:auto; padding:2px 8px; font-size:12px;">✕</button>
+    </div>
+    <form onsubmit="saveStudentSubmission(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="sSubHwId">
+      
+      <div id="sSubTeacherAttachBox" style="background:#f8fafc; border:1px solid #cbd5e1; padding:10px; border-radius:8px; display:none;">
+        <div style="font-size:11px; font-weight:800; color:var(--navy); text-transform:uppercase; margin-bottom:4px;">
+          <i class="fa-solid fa-paperclip" style="color:var(--gold);"></i> 📄 Teacher Attachment (Uploaded by Instructor):
+        </div>
+        <div id="sSubTeacherAttachContent"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="font-size:12px; font-weight:700;">Student Solution Notes / Remarks</label>
+        <textarea id="sSubNotes" class="form-input" style="height:70px; font-size:13px;" placeholder="Add comments or notes for your instructor..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" style="font-size:12px; font-weight:700;">
+          <i class="fa-solid fa-file-arrow-up" style="color:var(--navy);"></i> 📤 Attach Student Solution File (PDF, Word, Doc, Image)
+        </label>
+        <input type="file" id="sSubFile" class="form-input" style="font-size:12px; padding:6px; width:100%;">
+        <div id="sSubExistingFileLabel" style="font-size:11px; color:var(--green); font-weight:700; margin-top:4px;"></div>
+      </div>
+
+      <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+        <button type="button" onclick="closeOverlay('studentSubmitHomeworkModal')" class="btn btn-outline" style="width:auto;">Cancel</button>
+        <button type="submit" id="saveStudentSubBtn" class="btn btn-navy" style="width:auto;"><i class="fa-solid fa-paper-plane"></i> Submit Solution</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Teacher View Student Submissions & Attachments -->
+<div class="overlay" id="teacherSubmissionsModal" style="z-index: 10000; display:none;">
+  <div class="modal" style="max-width: 650px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-subtle); padding-bottom:10px;">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:20px; margin:0; color:var(--navy-dark);" id="tSubModalTitle">Student Homework Submissions</h3>
+        <p style="font-size:11px; color:var(--text-muted); margin:2px 0 0 0;" id="tSubModalSubtitle">Review student solutions and attached files.</p>
+      </div>
+      <button onclick="closeOverlay('teacherSubmissionsModal')" class="btn btn-outline" style="width:auto; padding:4px 10px; font-size:12px;">Close</button>
+    </div>
+    <div id="tSubmissionsList" style="max-height:380px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding-right:4px;">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- YGS PORTAL ASSISTANT BOT -->
+<style>
+  .bot-quick-btn:hover {
+    background: var(--navy) !important;
+    color: #fff !important;
+    border-color: var(--navy) !important;
+  }
+  #ygsBotToggle:hover {
+    transform: scale(1.08);
+    background: var(--navy-light) !important;
+  }
+</style>
+<div id="ygsBotContainer" style="position:fixed; bottom:25px; right:25px; z-index:9999; font-family:'Outfit',sans-serif;">
+  <!-- Toggle Button -->
+  <button id="ygsBotToggle" onclick="toggleYgsBot()" style="width:60px; height:60px; border-radius:50%; background:var(--navy); color:#fff; border:none; box-shadow:0 6px 20px rgba(0,0,0,0.2); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:24px; transition:transform 0.2s, background 0.2s;">
+    <i class="fa-solid fa-robot"></i>
+  </button>
+  
+  <!-- Chat Window -->
+  <div id="ygsBotWindow" style="display:none; width:360px; height:480px; background:#fff; border-radius:16px; border:1px solid #e2e8f0; box-shadow:0 12px 30px rgba(0,0,0,0.15); flex-direction:column; overflow:hidden; position:absolute; bottom:75px; right:0; transition:all 0.3s ease;">
+    <!-- Header -->
+    <div style="background:var(--navy); color:#fff; padding:16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#22c55e;"></div>
+        <span style="font-weight:700; font-size:15px;">YGS Portal Assistant</span>
+      </div>
+      <button onclick="toggleYgsBot()" style="background:transparent; border:none; color:#fff; cursor:pointer; font-size:16px;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    
+    <!-- Messages Area -->
+    <div id="ygsBotMessages" style="flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; background:#f8fafc; font-size:13px; line-height:1.4;">
+      <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; align-self:flex-start; max-width:85%; color:var(--navy); box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        Hallo! I am your <strong>YGS Portal Assistant</strong>. Ask me anything about how this website works, or select a guide below:
+        <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px; width:100%;">
+          <button class="bot-quick-btn" onclick="triggerBotGuide('approve')" style="text-align:left; background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; color:var(--navy); transition:background 0.2s; border-left:3px solid var(--accent-gold);">📋 How to approve students?</button>
+          <button class="bot-quick-btn" onclick="triggerBotGuide('schedule')" style="text-align:left; background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; color:var(--navy); transition:background 0.2s; border-left:3px solid var(--accent-gold);">📅 Setting batch schedules?</button>
+          <button class="bot-quick-btn" onclick="triggerBotGuide('teacher')" style="text-align:left; background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; color:var(--navy); transition:background 0.2s; border-left:3px solid var(--accent-gold);">🎓 Assigning batches to teachers?</button>
+          <button class="bot-quick-btn" onclick="triggerBotGuide('homework')" style="text-align:left; background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; color:var(--navy); transition:background 0.2s; border-left:3px solid var(--accent-gold);">📝 Grading homework/marks?</button>
+          <button class="bot-quick-btn" onclick="triggerBotGuide('attendance')" style="text-align:left; background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 10px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; color:var(--navy); transition:background 0.2s; border-left:3px solid var(--accent-gold);">🟢 Live class &amp; auto-attendance?</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Input Area -->
+    <form onsubmit="submitBotMessage(event)" style="display:flex; border-top:1px solid #e2e8f0; padding:8px; background:#fff; margin:0;">
+      <input type="text" id="ygsBotInput" placeholder="Ask about a feature..." style="flex:1; border:1px solid #cbd5e1; padding:8px 12px; border-radius:8px; outline:none; font-size:13px;" required autocomplete="off">
+      <button type="submit" style="background:var(--navy); color:#fff; border:none; padding:8px 14px; border-radius:8px; margin-left:6px; cursor:pointer; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div>&copy; 2026 YourGermanSchool (YGS). All rights reserved.</div>
+    <div>Admissions Helpline: +92 303 5580150</div>
+  </div>
+</footer>
+
+<script src="ygs_database.js"></script>
+<script>
+  // ============================================================
+  //  LOADER HELPERS
+  // ============================================================
+  function showLoader(msg) {
+    document.getElementById('loaderText').textContent = msg || 'Please wait...';
+    document.getElementById('pageLoader').classList.add('show');
+  }
+  function hideLoader() {
+    document.getElementById('pageLoader').classList.remove('show');
+  }
+
+  function btnLoading(btnId, loadingText) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn._origHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span> ${loadingText || 'Saving...'}`;
+  }
+  function btnDone(btnId) {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.disabled = false;
+    if (btn._origHTML) btn.innerHTML = btn._origHTML;
+  }
+
+  // ============================================================
+  //  NAME CLEANER HELPER
+  //  Ensures phone numbers (e.g. 03312937717) or emails are resolved to real names
+  // ============================================================
+  function getCleanName(user) {
+    if (!user) return 'User';
+    let name = (user.fullName || user.name || '').trim();
+    // If name is missing, purely numbers (e.g. 03312937717), or contains @
+    if (!name || /^[\d\s\+\-\(\)]+$/.test(name) || name.includes('@')) {
+      const email = (user.email || '').trim().toLowerCase();
+      if (email.includes('hargun')) return 'Hargun';
+      if (email.includes('attiya')) return 'Attiya';
+      if (email) {
+        const parts = email.split('@')[0];
+        return parts.charAt(0).toUpperCase() + parts.slice(1);
+      }
+      return 'Student';
+    }
+    return name;
+  }
+
+  // ============================================================
+  //  HEADER NAV BAR STATE
+  // ============================================================
+  function setHeaderState(isLoggedIn, user = null) {
+    const nav = document.getElementById('mainNav');
+    const logoutDiv = document.getElementById('logoutBtn');
+    const navUser = document.getElementById('navUserName');
+
+    if (isLoggedIn && user) {
+      if (nav) nav.style.display = 'none'; // HIDE NAV MENU LINKS WHEN LOGGED IN
+      if (logoutDiv) logoutDiv.style.display = 'flex';
+      if (navUser) navUser.textContent = getCleanName(user); // Always display name, never phone number
+    } else {
+      if (nav) nav.style.display = 'flex'; // SHOW NAV MENU WHEN LOGGED OUT
+      if (logoutDiv) logoutDiv.style.display = 'none';
+    }
+  }
+
+  // ============================================================
+  //  PAGE INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    const role = sessionStorage.getItem('ygs_role');
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (role === 'ADMIN')             showAdmin();
+    else if (role === 'TEACHER' && user) showTeacher(user);
+    else if (role === 'STUDENT' && user) showStudent(user);
+    else setHeaderState(false);
+    ygsDB.ready.catch(err => console.warn('[YGS] DB init warning:', err));
+  });
+
+  // Listen for background SWR cloud updates and refresh active view
+  window.addEventListener('ygs-data-updated', () => {
+    const role = sessionStorage.getItem('ygs_role');
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (role === 'ADMIN') {
+      renderAdmin().catch(() => {});
+    } else if (role === 'TEACHER' && user) {
+      showTeacher(user).catch(() => {});
+    } else if (role === 'STUDENT' && user) {
+      showStudent(user).catch(() => {});
+    }
+  });
+
+  // ============================================================
+  //  LOGIN
+  // ============================================================
+  async function handleLogin(e) {
+    e.preventDefault();
+    const email   = (document.getElementById('loginEmail').value   || '').trim().toLowerCase();
+    const pass    = (document.getElementById('loginPassword').value || '').trim();
+    const alertEl = document.getElementById('loginAlert');
+    alertEl.style.display = 'none';
+
+    if (!email || !pass) {
+      alertEl.style.display = 'block';
+      alertEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Please enter your email and password.';
+      return;
+    }
+
+    btnLoading('loginBtn', 'Authenticating...');
+    showLoader('Signing you in...');
+
+    let result = syncAuth(email, pass);
+
+    if (!result || !result.success) {
+      try {
+        const authPromise = ygsDB.ready.then(() => ygsDB.authenticateUser(email, pass));
+        const timeout     = new Promise((_, rej) => setTimeout(() => rej('timeout'), 800));
+        result = await Promise.race([authPromise, timeout]);
+      } catch (_) {}
+    }
+
+    hideLoader();
+    btnDone('loginBtn');
+
+    if (!result || !result.success) {
+      alertEl.style.display = 'block';
+      const err = result ? result.error : 'UNKNOWN';
+      if (err === 'DEACTIVATED') {
+        alertEl.innerHTML = '<i class="fa-solid fa-ban"></i> <strong>ACCOUNT DEACTIVATED:</strong> Contact Admin at +92 303 5580150.';
+      } else if (err === 'PENDING') {
+        alertEl.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> <strong>PENDING APPROVAL:</strong> Admin has not approved your account yet.';
+      } else {
+        alertEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> <strong>ACCESS DENIED:</strong> Wrong email or password. <a href="register.html" style="color:var(--accent-gold);">Register here</a>.';
+      }
+      return;
+    }
+
+    const user = result.user;
+    user.fullName = getCleanName(user); // Clean up any phone numbers in user record
+    sessionStorage.setItem('ygs_role', user.role);
+    sessionStorage.setItem('ygs_user', JSON.stringify(user));
+    localStorage.setItem('ygs_role', user.role);
+    localStorage.setItem('ygs_user', JSON.stringify(user));
+    if      (user.role === 'ADMIN')   showAdmin();
+    else if (user.role === 'TEACHER') showTeacher(user);
+    else if (user.role === 'STUDENT') showStudent(user);
+  }
+
+  function syncAuth(email, pass) {
+    if (email === 'admin@ygs.com' && pass === 'admin123') {
+      return { success: true, user: { id: 'USR-ADMIN-001', fullName: 'Super Admin', email, role: 'ADMIN', status: 'APPROVED' } };
+    }
+    const teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+    for (const t of teachers) {
+      if ((t.email||'').trim().toLowerCase() === email && (t.password||'').trim() === pass) {
+        if (t.status === 'DEACTIVATED') return { success: false, error: 'DEACTIVATED' };
+        return { success: true, user: { ...t, role: 'TEACHER', fullName: getCleanName(t) } };
+      }
+    }
+    const students = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+    for (const s of students) {
+      if ((s.email||'').trim().toLowerCase() === email && (s.password||'').trim() === pass) {
+        if (s.status === 'DEACTIVATED') return { success: false, error: 'DEACTIVATED' };
+        if (s.status === 'PENDING')     return { success: false, error: 'PENDING' };
+        return { success: true, user: { ...s, role: 'STUDENT', fullName: getCleanName(s) } };
+      }
+    }
+    return { success: false, error: 'NOT_FOUND' };
+  }
+
+  // ============================================================
+  //  DASHBOARDS
+  // ============================================================
+  function hideAll() {
+    ['loginSection','adminSection','teacherSection','studentSection'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    setHeaderState(false);
+  }
+
+  async function showAdmin() {
+    hideAll();
+    const adminUser = JSON.parse(sessionStorage.getItem('ygs_user') || '{"fullName":"Super Admin"}');
+    setHeaderState(true, adminUser);
+    document.getElementById('adminSection').style.display = 'block';
+    await renderAdmin();
+  }
+
+  async function showTeacher(user) {
+    hideAll();
+    let freshUser = user;
+    try { freshUser = (await ygsDB.getUserById(user.id)) || user; } catch (_) {}
+    const cleanName = getCleanName(freshUser);
+    freshUser.fullName = cleanName;
+    setHeaderState(true, freshUser);
+    document.getElementById('teacherSection').style.display = 'block';
+    document.getElementById('tName').textContent   = cleanName;
+    document.getElementById('tCourse').textContent = freshUser.assignedCourse || 'German Language';
+    
+    // Load visual weekly timetable for teacher
+    const tNameLower = cleanName.trim().toLowerCase();
+    const batches = await ygsDB.getAllBatches();
+    const myBatches = batches.filter(b => (b.teacher || '').trim().toLowerCase() === tNameLower);
+    const ttBox = document.getElementById('teacherTimetableBox');
+    const ttCard = document.getElementById('teacherTimetableCard');
+    if (myBatches.length > 0) {
+      ttCard.style.display = 'block';
+      ttBox.innerHTML = myBatches.map(b => `
+        <div style="background:var(--bg-section); padding:14px; border-radius:8px; border:1px solid var(--border-subtle);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+            <div style="font-weight:700; font-size:14px; color:var(--navy-dark);"><i class="fa-solid fa-layer-group"></i> Batch: <strong>${b.batchNumber}</strong> (${b.course})</div>
+            ${b.startDate ? `
+              <div style="font-size:10px; display:flex; gap:6px;">
+                <span class="badge badge-approved" style="font-size:9px; padding:2px 6px;">Start: ${b.startDate}</span>
+                <span class="badge badge-deactivated" style="font-size:9px; padding:2px 6px;">End: ${b.endDate}</span>
+              </div>
+            ` : ''}
+          </div>
+          ${renderVisualTimetableHTML(b.scheduleData || b.schedule, b.timezone)}
+        </div>
+      `).join('');
+    } else {
+      ttCard.style.display = 'none';
+    }
+
+    // Render pending leaves
+    try {
+      const leaves = await ygsDB.getAllLeaves();
+      const cleanTName = cleanName.trim().toLowerCase();
+      const pendingLeaves = leaves.filter(l => (l.teacher || '').trim().toLowerCase() === cleanTName && l.status === 'Pending');
+      const leavesCard = document.getElementById('tPendingLeavesCard');
+      const leavesContainer = document.getElementById('tPendingLeavesContainer');
+      
+      if (pendingLeaves.length > 0) {
+        leavesCard.style.display = 'block';
+        leavesContainer.innerHTML = pendingLeaves.map(l => `
+          <div style="background:#fff; border:1px solid var(--border-subtle); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:13px; box-shadow:var(--shadow-sm);">
+            <div>
+              <strong>${l.studentName}</strong> (Batch: ${l.batch}) requested leave for <strong>${l.date}</strong>
+              <div style="color:var(--text-muted); font-size:11px; margin-top:4px; font-style:italic;">Reason: "${l.reason}"</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button onclick="handleLeaveDecision('${l.id}', 'Approved')" class="btn btn-green" style="font-size:11px; padding:6px 12px; width:auto; line-height:1;"><i class="fa-solid fa-circle-check"></i> Approve</button>
+              <button onclick="handleLeaveDecision('${l.id}', 'Rejected')" class="btn btn-red" style="font-size:11px; padding:6px 12px; width:auto; line-height:1;"><i class="fa-solid fa-circle-xmark"></i> Reject</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        leavesCard.style.display = 'none';
+      }
+    } catch(err) {
+      console.warn('Failed to load pending leaves:', err);
+    }
+
+    await renderRoster(freshUser);
+    await renderTeacherAttendance(freshUser);
+    await renderTeacherHomework(freshUser);
+    
+    // Check for timetable conflict polls & onboarding tour
+    checkForActivePolls(freshUser).catch(err => console.warn(err));
+    if (freshUser.isFirstLogin !== false) {
+      setTimeout(() => startOnboardingTour(), 600);
+    }
+  }
+
+  function normalizeDateStr(dStr) {
+    if (!dStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dStr)) return dStr;
+    const d = new Date(dStr);
+    if (isNaN(d.getTime())) return dStr;
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function calculateStudentAttendanceRate(student, batchesList, attendanceLogs, offDaysList) {
+    if (!student.batch) return '100%';
+    const batch = batchesList.find(b => b.batchNumber === student.batch);
+    if (!batch) return '100%';
+    
+    const start = batch.createdAt ? new Date(batch.createdAt) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    start.setHours(0,0,0,0);
+    const end = new Date();
+    end.setHours(23,59,59,999);
+    
+    const attMap = {};
+    attendanceLogs.forEach(l => {
+      if (l.date) {
+        const norm = normalizeDateStr(l.date);
+        attMap[norm] = l;
+      }
+    });
+    
+    let totalClassDays = 0;
+    let presentDays = 0;
+    
+    let sched = batch.scheduleData || batch.schedule;
+    if (typeof sched === 'string' && sched.startsWith('{')) {
+      try { sched = JSON.parse(sched); } catch(_) {}
+    }
+    
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    let d = new Date(start.getTime());
+    while (d <= end) {
+      const ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      
+      let isClass = false;
+      if (sched && sched.days) {
+        const dowName = daysOfWeek[d.getDay()];
+        const dConf = sched.days[dowName];
+        isClass = dConf ? dConf.isClass : false;
+      } else {
+        const dow = d.getDay();
+        isClass = dow !== 0 && dow !== 6;
+      }
+      
+      if (isClass && (!offDaysList || !offDaysList[ds])) {
+        const log = attMap[ds];
+        if (log) {
+          if (log.status === 'Present' || log.status === 'Late') {
+            presentDays++;
+            totalClassDays++;
+          } else if (log.status === 'Absent') {
+            totalClassDays++;
+          }
+        } else {
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          const curDate = new Date(d.getTime());
+          curDate.setHours(0,0,0,0);
+          
+          const isPast = curDate.getTime() < today.getTime();
+          let isMissedToday = false;
+          
+          if (curDate.getTime() === today.getTime()) {
+            if (sched && sched.days) {
+              const dowName = daysOfWeek[today.getDay()];
+              const dConf = sched.days[dowName];
+              if (dConf && dConf.isClass && dConf.time) {
+                const timeParts = dConf.time.split(':');
+                const schedHours = parseInt(timeParts[0]);
+                const schedMins = parseInt(timeParts[1]);
+                const schedTime = new Date();
+                schedTime.setHours(schedHours, schedMins, 0, 0);
+                isMissedToday = (new Date().getTime() - schedTime.getTime()) / (1000 * 60) > 60;
+              }
+            }
+          }
+          
+          if (isPast || isMissedToday) {
+            totalClassDays++;
+          }
+        }
+      }
+      d.setDate(d.getDate() + 1);
+    }
+    
+    if (totalClassDays === 0) return '100%';
+    return Math.round((presentDays / totalClassDays) * 100) + '%';
+  }
+
+  async function showStudent(user) {
+    hideAll();
+    let freshUser = user;
+    try { freshUser = (await ygsDB.getUserById(user.id)) || user; } catch (_) {}
+    const cleanName = getCleanName(freshUser);
+    freshUser.fullName = cleanName;
+    setHeaderState(true, freshUser);
+    document.getElementById('studentSection').style.display = 'block';
+    document.getElementById('sName').textContent       = cleanName; // Displays "Hargun" instead of phone number
+    document.getElementById('sCourse').textContent     = freshUser.course || 'German Language';
+    document.getElementById('sBatch').textContent      = freshUser.batch || 'Not Assigned';
+    document.getElementById('sTeacher').textContent    = freshUser.teacher || 'Not Assigned Yet';
+    document.getElementById('sRemarks').textContent    = freshUser.teacherRemark || 'No remarks yet.';
+
+    // Dynamic Attendance Calculation
+    let calculatedRate = '100%';
+    try {
+      let logs = [];
+      try { logs = await ygsDB.getAttendanceForStudent(freshUser.email); } catch (_) {
+        const all = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+        logs = all.filter(a => (a.studentEmail||'').toLowerCase() === (freshUser.email||'').toLowerCase());
+      }
+      let batches = [];
+      try { batches = await ygsDB.getAllBatches(); } catch(_) {
+        batches = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+      }
+      let offDaysList = {};
+      try { offDaysList = JSON.parse(localStorage.getItem('ygs_off_days') || '{}'); } catch(_) {}
+      
+      calculatedRate = calculateStudentAttendanceRate(freshUser, batches, logs, offDaysList);
+      if (freshUser.attendance !== calculatedRate) {
+        freshUser.attendance = calculatedRate;
+        await ygsDB.saveUser(freshUser);
+      }
+    } catch(err) {
+      console.warn('Failed to calculate dynamic rate:', err);
+    }
+    document.getElementById('sAttendance').textContent = calculatedRate;
+
+    // Load visual weekly timetable for student
+    if (freshUser.batch) {
+      const batches = await ygsDB.getAllBatches();
+      const myBatch = batches.find(b => b.batchNumber === freshUser.batch);
+      const sTimetableCard = document.getElementById('studentTimetableCard');
+      const sTimetableBox = document.getElementById('studentTimetableBox');
+      if (myBatch) {
+        sTimetableCard.style.display = 'block';
+        sTimetableBox.innerHTML = renderVisualTimetableHTML(myBatch.scheduleData || myBatch.schedule, myBatch.timezone);
+        if (myBatch.startDate) {
+          document.getElementById('sBatch').innerHTML = `${myBatch.batchNumber}<br><span style="font-size:10px;font-weight:normal;color:var(--text-muted);">Start: ${myBatch.startDate} | End: ${myBatch.endDate}</span>`;
+        }
+      } else {
+        sTimetableCard.style.display = 'none';
+      }
+    } else {
+      document.getElementById('studentTimetableCard').style.display = 'none';
+    }
+
+    await renderStudentHomework(freshUser);
+    await renderStudentAttendanceSummary(freshUser);
+    
+    // Check for timetable conflict polls & first login tour
+    checkForActivePolls(freshUser).catch(err => console.warn(err));
+    if (freshUser.isFirstLogin !== false) {
+      setTimeout(() => startOnboardingTour(), 600);
+    }
+  }
+
+  function portalLogout() {
+    sessionStorage.removeItem('ygs_role');
+    sessionStorage.removeItem('ygs_user');
+    hideAll();
+    document.getElementById('loginSection').style.display = 'block';
+    document.getElementById('loginEmail').value    = '';
+    document.getElementById('loginPassword').value = '';
+  }
+
+  // ============================================================
+  //  ATTENDANCE CHECK-IN PROMPT & LAUNCH MEETING (Requirement #1)
+  // ============================================================
+  let currentStudentForMeeting = null;
+
+  async function promptStudentAttendance() {
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (!user) return;
+    let freshUser = user;
+    try { freshUser = (await ygsDB.getUserById(user.id)) || user; } catch (_) {}
+    currentStudentForMeeting = freshUser;
+
+    const now = new Date();
+    const todayDateIso = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    const legacyTodayStr = now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    
+    // Check if already checked in today (supporting both YYYY-MM-DD and legacy formats)
+    let logs = [];
+    try { logs = await ygsDB.getAttendanceForStudent(freshUser.email); } catch (_) {
+      const all = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+      logs = all.filter(a => (a.studentEmail||'').toLowerCase() === (freshUser.email||'').toLowerCase());
+    }
+    
+    const alreadyCheckedIn = logs.some(l => l.date === todayDateIso || l.date === legacyTodayStr);
+    if (alreadyCheckedIn) {
+      const meetLink = (freshUser.meetLink && freshUser.meetLink.startsWith('http')) ? freshUser.meetLink : 'https://meet.google.com/';
+      window.open(meetLink, '_blank');
+      return;
+    }
+
+    document.getElementById('attStudentName').textContent = freshUser.fullName;
+    document.getElementById('attCourse').textContent      = freshUser.course || 'German Language';
+    document.getElementById('attBatch').textContent       = freshUser.batch || 'Not Assigned';
+    document.getElementById('attDateTime').textContent    = legacyTodayStr + ' ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+
+    document.getElementById('attendanceModal').style.display = 'flex';
+  }
+
+  async function confirmAttendanceAndLaunch() {
+    if (!currentStudentForMeeting) return;
+    const s = currentStudentForMeeting;
+    btnLoading('confirmAttBtn', 'Check-In...');
+    showLoader('Logging attendance check-in...');
+
+    const now = new Date();
+    const todayDateIso = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    
+    // Auto-detect status: Present vs Late based on batch schedule & late limit
+    let calculatedStatus = 'Present';
+    try {
+      if (s.batch) {
+        let batches = [];
+        try { batches = await ygsDB.getAllBatches(); } catch(_) {
+          batches = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+        }
+        const myBatch = batches.find(b => b.batchNumber === s.batch);
+        if (myBatch) {
+          const lateLimit = parseInt(myBatch.lateLimit) || 10;
+          let sched = myBatch.scheduleData || myBatch.schedule;
+          if (typeof sched === 'string' && sched.startsWith('{')) {
+            try { sched = JSON.parse(sched); } catch(_) {}
+          }
+          if (sched && sched.days) {
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dowName = daysOfWeek[now.getDay()];
+            const dConf = sched.days[dowName];
+            if (dConf && dConf.isClass && dConf.time) {
+              const timeParts = dConf.time.split(':');
+              const schedHours = parseInt(timeParts[0]);
+              const schedMins = parseInt(timeParts[1]);
+              
+              const schedTime = new Date();
+              schedTime.setHours(schedHours, schedMins, 0, 0);
+              
+              const diffMins = (now.getTime() - schedTime.getTime()) / (1000 * 60);
+              if (diffMins > lateLimit) {
+                calculatedStatus = 'Late';
+              }
+            }
+          }
+        }
+      }
+    } catch(err) {
+      console.warn('Failed to calculate auto status:', err);
+    }
+    
+    const attRecord = {
+      id: 'ATT-' + Date.now(),
+      studentId: s.id,
+      studentName: s.fullName,
+      studentEmail: s.email,
+      course: s.course || 'German Language',
+      batch: s.batch || 'Not Assigned',
+      date: todayDateIso, // Saved as YYYY-MM-DD to match database calendar format
+      time: now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' }),
+      timestamp: now.toISOString(),
+      status: calculatedStatus
+    };
+
+    try {
+      await ygsDB.saveAttendance(attRecord);
+
+      // Compute dynamic attendance rate including auto-absences
+      const studentLogs = await ygsDB.getAttendanceForStudent(s.email);
+      let batches = [];
+      try { batches = await ygsDB.getAllBatches(); } catch(_) {
+        batches = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+      }
+      let offDaysList = {};
+      try { offDaysList = JSON.parse(localStorage.getItem('ygs_off_days') || '{}'); } catch(_) {}
+      
+      const rate = calculateStudentAttendanceRate(s, batches, studentLogs, offDaysList);
+      s.attendance = rate;
+      await ygsDB.saveUser(s);
+      sessionStorage.setItem('ygs_user', JSON.stringify(s));
+    } catch (err) {
+      console.warn('[Attendance Error]', err);
+    }
+
+    hideLoader();
+    btnDone('confirmAttBtn');
+    closeOverlay('attendanceModal');
+
+    // Launch Zoom / Google Meet Link
+    const meetLink = (s.meetLink && s.meetLink.startsWith('http')) ? s.meetLink : 'https://meet.google.com/';
+    window.open(meetLink, '_blank');
+
+    // Refresh Student UI
+    await showStudent(s);
+  }
+
+  // ============================================================
+  //  ADMIN RENDER
+  // ============================================================
+  async function renderAdmin() {
+    let students = [], teachers = [], batches = [], polls = [];
+    try {
+      [students, teachers, batches, polls] = await Promise.all([
+        ygsDB.getAllStudents(), ygsDB.getAllTeachers(), ygsDB.getAllBatches(), ygsDB.getAllPolls()
+      ]);
+      localStorage.setItem('ygs_students', JSON.stringify(students));
+      localStorage.setItem('ygs_teachers', JSON.stringify(teachers));
+      localStorage.setItem('ygs_batches',  JSON.stringify(batches));
+      localStorage.setItem('ygs_polls',    JSON.stringify(polls));
+    } catch (_) {
+      students = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+      teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+      batches  = JSON.parse(localStorage.getItem('ygs_batches')  || '[]');
+      polls    = JSON.parse(localStorage.getItem('ygs_polls')    || '[]');
+    }
+    const pending = students.filter(s => s.status === 'PENDING');
+    document.getElementById('kpiPending').textContent  = pending.length;
+    document.getElementById('kpiStudents').textContent = students.length;
+    document.getElementById('kpiTeachers').textContent = teachers.length;
+    document.getElementById('kpiBatches').textContent  = batches.length;
+    renderPending(pending);
+    renderAllStudents(students);
+    renderTeachers(teachers);
+    renderBatches(batches, polls);
+    await renderAdminAttendance();
+    await renderAdminOffDayRequests(teachers);
+  }
+
+  async function renderAdminOffDayRequests(teachers) {
+    let offDays = [];
+    try { offDays = await ygsDB.getAllOffDays(); } catch(_) {
+      offDays = JSON.parse(localStorage.getItem('ygs_off_days') || '[]');
+    }
+    const pendingReqs = Array.isArray(offDays) ? offDays.filter(o => o.status === 'PENDING_ADMIN_APPROVAL') : [];
+    const card = document.getElementById('adminOffDayCard');
+    const container = document.getElementById('adminOffDayContainer');
+    
+    if (pendingReqs.length > 0) {
+      card.style.display = 'block';
+      container.innerHTML = pendingReqs.map(r => `
+        <div style="background:#fff; border:1px solid var(--border-subtle); padding:12px 16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; box-shadow:var(--shadow-sm);">
+          <div>
+            <strong style="color:var(--navy-dark); font-size:14px;">${r.teacherName}</strong> requested Off Day for Date: <strong style="color:var(--accent-gold);">${r.date}</strong>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <select id="sub_sel_${r.id}" class="form-input" style="width:200px; padding:6px 10px; font-size:12px;">
+              <option value="">-- Assign Substitute Teacher --</option>
+              ${teachers.map(t => `<option value="${t.fullName}">${t.fullName} (${t.assignedCourse || 'Faculty'})</option>`).join('')}
+            </select>
+            <button onclick="approveOffDaySubstitute('${r.id}')" class="btn btn-green" style="font-size:11px; padding:6px 12px; width:auto; line-height:1;"><i class="fa-solid fa-check"></i> Assign & Approve</button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      card.style.display = 'none';
+    }
+  }
+
+  async function approveOffDaySubstitute(reqId) {
+    const subSel = document.getElementById('sub_sel_' + reqId);
+    const subTeacher = subSel ? subSel.value : '';
+    if (!subTeacher) {
+      alert('Please select a substitute teacher from the dropdown list before approving.');
+      return;
+    }
+
+    showLoader('Assigning substitute teacher...');
+    try {
+      let offDays = await ygsDB.getAllOffDays();
+      if (!Array.isArray(offDays)) offDays = [];
+      const req = offDays.find(x => x.id === reqId);
+      if (req) {
+        req.status = 'APPROVED';
+        req.substituteTeacher = subTeacher;
+        await ygsDB.saveOffDay(req);
+      }
+    } catch(err) {
+      console.warn('Failed to assign substitute:', err);
+    }
+
+    hideLoader();
+    alert(`Off-day approved! ${subTeacher} has been notified as substitute teacher.`);
+    renderAdmin().catch(() => {});
+  }
+
+  function renderPending(list) {
+    const tbody = document.getElementById('pendingTbody');
+    if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No pending enrollment applications.</td></tr>'; return; }
+    tbody.innerHTML = list.map(s => `
+      <tr>
+        <td><strong>${s.fullName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${s.email}</span></td>
+        <td>${s.phone || 'N/A'}</td>
+        <td><span style="background:rgba(197,155,39,.15);padding:3px 8px;border-radius:4px;font-weight:700;font-size:11px;">${s.course}</span></td>
+        <td><span onclick="viewReceipt('${s.id}')" style="color:var(--green);font-weight:700;text-decoration:underline;cursor:pointer;"><i class="fa-solid fa-file-invoice-dollar"></i> ${s.paymentProof || 'receipt.pdf'}</span></td>
+        <td><span class="badge badge-pending">PENDING</span></td>
+        <td style="text-align:center;display:flex;gap:6px;justify-content:center;">
+          <button onclick="openStudentModal('${s.id}')" class="btn btn-green" style="font-size:11px;padding:6px 10px;width:auto;"><i class="fa-solid fa-circle-check"></i> Approve &amp; Assign</button>
+          <button onclick="deleteUser('${s.id}','${s.fullName}')" class="btn btn-red" style="font-size:11px;padding:6px 10px;width:auto;"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function renderAllStudents(list) {
+    const tbody = document.getElementById('allStudentsTbody');
+    if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No students in database yet.</td></tr>'; return; }
+    tbody.innerHTML = list.map(s => `
+      <tr>
+        <td><strong>${s.fullName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${s.email}</span></td>
+        <td>${s.course}</td>
+        <td><strong>${s.batch || 'Not Assigned'}</strong></td>
+        <td><strong style="color:var(--green);">${s.teacher || 'Not Assigned'}</strong></td>
+        <td><span class="badge ${s.status==='APPROVED'?'badge-approved':s.status==='DEACTIVATED'?'badge-deactivated':'badge-pending'}">${s.status}</span></td>
+        <td style="text-align:center;">
+          <button onclick="viewStudentProfile('${s.id}')" class="btn btn-navy" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-user-graduate"></i> Profile</button>
+          <button onclick="openStudentModal('${s.id}')" class="btn btn-outline" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-user-pen"></i> Edit</button>
+          <button onclick="toggleStatus('${s.id}','${s.status}','student')" class="btn ${s.status==='DEACTIVATED'?'btn-green':'btn-orange'}" style="font-size:11px;padding:5px 8px;width:auto;">
+            <i class="fa-solid ${s.status==='DEACTIVATED'?'fa-user-check':'fa-user-slash'}"></i> ${s.status==='DEACTIVATED'?'Activate':'Deactivate'}
+          </button>
+          <button onclick="deleteUser('${s.id}','${s.fullName}')" class="btn btn-red" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function renderTeachers(list) {
+    const tbody = document.getElementById('teachersTbody');
+    if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No teachers in database. Add one using the button above.</td></tr>'; return; }
+    tbody.innerHTML = list.map(t => {
+      const batchesHtml = (t.assignedBatches && t.assignedBatches.length > 0)
+        ? t.assignedBatches.map(b => `<span class="badge badge-approved" style="font-size:9px;padding:2px 6px;margin:2px;display:inline-block;">${b}</span>`).join(' ')
+        : '<span style="font-size:11px;color:var(--text-muted);">None</span>';
+      return `
+        <tr>
+          <td><strong>${t.fullName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${t.email}</span></td>
+          <td>${t.qualification || 'N/A'}</td>
+          <td>
+            <div style="background:rgba(197,155,39,.15);padding:3px 8px;border-radius:4px;font-weight:700;font-size:11px;margin-bottom:4px;display:inline-block;color:var(--accent-gold);">${t.assignedCourse || 'N/A'}</div>
+            <div style="font-size:11px;margin-top:2px;"><strong>Batches:</strong> ${batchesHtml}</div>
+          </td>
+          <td>${t.specialization || 'N/A'}</td>
+          <td><span class="badge ${t.status==='DEACTIVATED'?'badge-deactivated':'badge-approved'}">${t.status || 'ACTIVE'}</span></td>
+          <td style="text-align:center;">
+            <button onclick="openTeacherModal('${t.id}')" class="btn btn-outline" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-user-gear"></i> Edit</button>
+            <button onclick="toggleStatus('${t.id}','${t.status}','teacher')" class="btn ${t.status==='DEACTIVATED'?'btn-green':'btn-orange'}" style="font-size:11px;padding:5px 8px;width:auto;">
+              <i class="fa-solid ${t.status==='DEACTIVATED'?'fa-user-check':'fa-user-slash'}"></i> ${t.status==='DEACTIVATED'?'Activate':'Deactivate'}
+            </button>
+            <button onclick="deleteUser('${t.id}','${t.fullName}')" class="btn btn-red" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderBatches(list, polls = []) {
+    const tbody = document.getElementById('batchesTbody');
+    if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No batches created yet.</td></tr>'; return; }
+    tbody.innerHTML = list.map(b => {
+      const poll = polls.find(p => p.batchNumber === b.batchNumber && p.status === 'ACTIVE');
+      let pollHtml = '';
+      if (poll) {
+        const votes = poll.votes || {};
+        const totalVotes = Object.keys(votes).length;
+        pollHtml = `
+          <div style="margin-top:8px; background:rgba(197,155,39,0.1); padding:8px; border-radius:6px; border:1px solid rgba(197,155,39,0.25); font-size:11px;">
+            <div style="font-weight:700; color:var(--accent-gold); margin-bottom:4px;"><i class="fa-solid fa-square-poll-horizontal"></i> Active Timing Poll:</div>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+        `;
+        poll.proposedTimes.forEach(opt => {
+          const count = Object.values(votes).filter(v => v.choice === opt).length;
+          const pct = totalVotes > 0 ? Math.round(count / totalVotes * 100) : 0;
+          pollHtml += `
+            <div>
+              <div style="display:flex; justify-content:space-between; font-weight:600;">
+                <span>${opt}</span>
+                <span>${count} votes (${pct}%)</span>
+              </div>
+              <div style="background:var(--border-subtle); height:6px; border-radius:3px; overflow:hidden; margin-top:2px;">
+                <div style="background:var(--accent-gold); width:${pct}%; height:100%;"></div>
+              </div>
+            </div>
+          `;
+        });
+        pollHtml += `
+            </div>
+            <div style="margin-top:8px; display:flex; gap:6px;">
+              <button onclick="viewPollRemarks('${poll.id}')" class="btn btn-navy" style="font-size:9px; padding:3px 6px; width:auto; line-height:1;"><i class="fa-solid fa-comments"></i> Remarks (${Object.values(votes).filter(v => v.remark).length})</button>
+              <button onclick="closePoll('${poll.id}')" class="btn btn-red" style="font-size:9px; padding:3px 6px; width:auto; line-height:1;"><i class="fa-solid fa-circle-check"></i> Resolve</button>
+            </div>
+          </div>`;
+      }
+
+      return `
+      <tr>
+        <td>
+          <strong>${b.batchNumber}</strong>
+          ${b.startDate ? `
+            <div style="margin-top:6px; font-size:10px; line-height:1.4;">
+              <span class="badge badge-approved" style="font-size:9px; padding:2px 6px;">Start: ${b.startDate}</span><br>
+              <span class="badge badge-deactivated" style="font-size:9px; padding:2px 6px; margin-top:2px; display:inline-block;">End: ${b.endDate}</span>
+            </div>
+          ` : ''}
+        </td>
+        <td>${b.course}</td>
+        <td>${b.teacher}</td>
+        <td>
+          <div style="font-weight:700; margin-bottom:4px; font-size:13px; color:var(--navy-dark);">${b.schedule}</div>
+          ${renderVisualTimetableHTML(b.scheduleData || b.schedule, b.timezone)}
+          ${pollHtml}
+        </td>
+        <td>
+          <a href="${b.meetLink}" target="_blank" style="color:var(--green);font-weight:700;"><i class="fa-solid fa-video"></i> Open Link</a>
+          <br>
+          <button onclick="openCreatePollModal('${b.batchNumber}')" class="btn btn-gold" style="font-size:10px;padding:4px 8px;width:auto;margin-top:6px;"><i class="fa-solid fa-square-poll-horizontal"></i> Timetable Poll</button>
+        </td>
+        <td style="text-align:center;"><button onclick="deleteBatch('${b.id}')" class="btn btn-red" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function renderAdminAttendance() {
+    let logs = [];
+    try { logs = await ygsDB.getAllAttendance(); } catch (_) {
+      logs = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+    }
+    const tbody = document.getElementById('adminAttendanceTbody');
+    if (!logs.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No live class attendance check-ins logged yet.</td></tr>';
+      return;
+    }
+    logs.sort((a,b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    tbody.innerHTML = logs.map(l => `
+      <tr>
+        <td><strong>${l.studentName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${l.studentEmail}</span></td>
+        <td>${l.course}</td>
+        <td><strong>${l.batch}</strong></td>
+        <td>${l.date} &bull; ${l.time}</td>
+        <td><span class="badge badge-approved"><i class="fa-solid fa-check"></i> ${l.status || 'Present'}</span></td>
+      </tr>`).join('');
+  }
+
+  // ============================================================
+  //  TEACHER ROSTER & ATTENDANCE
+  // ============================================================
+  async function renderRoster(teacher) {
+    let students = [];
+    try { students = await ygsDB.getAllStudents(); } catch (_) {
+      students = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+    }
+    const tNameLower = (teacher.fullName || '').trim().toLowerCase();
+    const mine = students.filter(s => s.status === 'APPROVED' && (s.teacher||'').trim().toLowerCase() === tNameLower);
+    const tbody = document.getElementById('rosterTbody');
+    const countEl = document.getElementById('rosterCount');
+    if (countEl) countEl.textContent = mine.length + ' student' + (mine.length !== 1 ? 's' : '');
+    if (!mine.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No students assigned to you yet by Super Admin.</td></tr>'; return; }
+    tbody.innerHTML = mine.map(s => `
+      <tr data-name="${(s.fullName||'').toLowerCase()}" data-batch="${(s.batch||'').toLowerCase()}">
+        <td><strong>${s.fullName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${s.email}</span></td>
+        <td><strong>${s.batch || 'N/A'}</strong></td>
+        <td>${s.course}</td>
+        <td><strong style="color:var(--green);">${s.attendance || '100%'}</strong></td>
+        <td><input type="text" class="form-input" style="padding:4px 8px;font-size:12px;" value="${s.teacherRemark||''}" placeholder="Leave remark..." onchange="saveRemark('${s.id}',this.value)"></td>
+        <td style="text-align:center;">
+          <button onclick="viewStudentProfile('${s.id}')" class="btn btn-navy" style="font-size:11px;padding:6px 12px;width:auto;">
+            <i class="fa-solid fa-user-graduate"></i> View Profile
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterRoster(q) {
+    const rows = document.querySelectorAll('#rosterTbody tr');
+    const query = q.trim().toLowerCase();
+    rows.forEach(row => {
+      const name  = row.dataset.name  || row.textContent.toLowerCase();
+      const batch = row.dataset.batch || '';
+      row.style.display = (!query || name.includes(query) || batch.includes(query)) ? '' : 'none';
+    });
+  }
+
+  function filterAdminStudents(q) {
+    const rows = document.querySelectorAll('#allStudentsTbody tr');
+    const query = q.trim().toLowerCase();
+    rows.forEach(row => {
+      row.style.display = (!query || row.textContent.toLowerCase().includes(query)) ? '' : 'none';
+    });
+  }
+
+  function viewStudentProfile(studentId) {
+    if (!studentId) return;
+    sessionStorage.setItem('ygs_profileStudentId', studentId);
+    localStorage.setItem('ygs_profileStudentId', studentId);
+    window.location.href = 'student_profile.html?id=' + encodeURIComponent(studentId);
+  }
+
+  function viewOwnProfile() {
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (user && user.id) {
+      viewStudentProfile(user.id);
+    } else {
+      alert('Could not resolve current student profile.');
+    }
+  }
+
+  function viewReceipt(studentId) {
+    ygsDB.getUserById(studentId).then(s => {
+      if (!s) return;
+      const data = s.paymentProofData;
+      const name = s.paymentProof || 'receipt.pdf';
+      if (!data) {
+        const uploadNow = confirm('No raw receipt file is attached to this student record (registered before update or offline demo).\n\nWould you like to upload/attach a receipt file for this student now?');
+        if (uploadNow) {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = '.pdf,.jpg,.jpeg,.png';
+          input.onchange = async () => {
+            if (input.files && input.files[0]) {
+              const file = input.files[0];
+              showLoader('Uploading receipt...');
+              try {
+                const base64 = await new Promise((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onload = (e) => resolve(e.target.result);
+                  reader.onerror = (err) => reject(err);
+                  reader.readAsDataURL(file);
+                });
+                s.paymentProof = file.name;
+                s.paymentProofData = base64;
+                await ygsDB.saveUser(s);
+                hideLoader();
+                alert('Receipt attached successfully! Click the link again to view it.');
+                await renderAdmin();
+              } catch (err) {
+                hideLoader();
+                alert('Failed to read file: ' + err);
+              }
+            }
+          };
+          input.click();
+        }
+        return;
+      }
+      if (data.startsWith('data:image/')) {
+        let modal = document.getElementById('receiptModal');
+        if (!modal) {
+          const div = document.createElement('div');
+          div.id = 'receiptModal';
+          div.className = 'overlay';
+          div.innerHTML = `
+            <div class="modal" style="max-width: 650px;">
+              <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:12px;">Fee Payment Receipt</h3>
+              <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center;max-height:60vh;overflow:auto;border:1px solid #cbd5e1;">
+                <img id="receiptModalImg" src="" style="max-width:100%;height:auto;border-radius:4px;box-shadow:0 4px 10px rgba(0,0,0,0.1);" />
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:20px;align-items:center;">
+                <span id="receiptModalName" style="font-size:12px;color:var(--text-muted);font-weight:600;"></span>
+                <div style="display:flex;gap:8px;">
+                  <a id="receiptModalDownload" href="" download="" class="btn btn-outline" style="font-size:12px;padding:8px 14px;width:auto;"><i class="fa-solid fa-download"></i> Download File</a>
+                  <button onclick="closeOverlay('receiptModal')" class="btn btn-navy" style="font-size:12px;padding:8px 14px;width:auto;">Close</button>
+                </div>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(div);
+          modal = div;
+        }
+        document.getElementById('receiptModalImg').src = data;
+        document.getElementById('receiptModalName').textContent = name;
+        document.getElementById('receiptModalDownload').href = data;
+        document.getElementById('receiptModalDownload').download = name;
+        modal.style.display = 'flex';
+      } else {
+        const link = document.createElement('a');
+        link.href = data;
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    });
+  }
+
+  async function renderTeacherAttendance(teacher) {
+    let logs = [];
+    try { logs = await ygsDB.getAllAttendance(); } catch (_) {
+      logs = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+    }
+    const tbody = document.getElementById('teacherAttendanceTbody');
+    if (!logs.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No class check-ins recorded for your students yet.</td></tr>';
+      return;
+    }
+    logs.sort((a,b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    tbody.innerHTML = logs.map(l => `
+      <tr>
+        <td><strong>${l.studentName}</strong><br><span style="font-size:11px;color:var(--text-muted);">${l.studentEmail}</span></td>
+        <td>${l.course}</td>
+        <td><strong>${l.batch}</strong></td>
+        <td>${l.date} &bull; ${l.time}</td>
+        <td><span class="badge badge-approved"><i class="fa-solid fa-check"></i> ${l.status || 'Present'}</span></td>
+      </tr>`).join('');
+  }
+
+  async function saveRemark(studentId, remark) {
+    try {
+      const student = await ygsDB.getUserById(studentId);
+      if (student) { student.teacherRemark = remark; await ygsDB.saveUser(student); }
+    } catch (_) {}
+  }
+
+  // ============================================================
+  //  STUDENT HOMEWORK & ATTENDANCE SUMMARY
+  // ============================================================
+  async function renderStudentHomework(student) {
+    let all = [];
+    try { all = await ygsDB.getAllAssignments(); } catch (_) { all = []; }
+    const filtered = all.filter(a => a.course === student.course);
+    const tbody = document.getElementById('hwTbody');
+    if (!filtered.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No assignments posted for your course yet.</td></tr>'; return; }
+    tbody.innerHTML = filtered.map(a => {
+      const sub = ((a.submissions || {})[student.id] || {});
+      const isSub = sub.status === 'Submitted';
+      const remarks = sub.remarks || a.teacherRemarks || 'N/A';
+      return `
+        <tr>
+          <td>
+            <strong>${a.title}</strong>
+            ${a.attachment ? `
+              <br>
+              <button onclick="downloadOrViewAttachment('${a.id}', 'teacher')" class="btn btn-outline" style="font-size:10px; padding:3px 6px; width:auto; margin-top:4px; line-height:1; border-color:#cbd5e1;"><i class="fa-solid fa-paperclip" style="color:var(--gold);"></i> 📄 Teacher File: ${a.attachment.name}</button>
+            ` : ''}
+            ${sub && sub.attachment ? `
+              <br>
+              <button onclick="downloadOrViewAttachment('${a.id}', 'student', '${student.id}')" class="btn btn-outline" style="font-size:10px; padding:3px 6px; width:auto; margin-top:4px; line-height:1; background:#f0fdf4; border-color:#86efac; color:#15803d;"><i class="fa-solid fa-file-arrow-up"></i> 📤 My Solution File: ${sub.attachment.name}</button>
+            ` : ''}
+          </td>
+          <td>${formatDateTime(a.dueDate)}</td>
+          <td><span class="badge ${isSub?'badge-approved':'badge-pending'}">${isSub?'Submitted':'Pending'}</span></td>
+          <td>${remarks}</td>
+          <td>${isSub
+            ? `<button onclick="openStudentSubmitHomeworkModal('${a.id}')" class="btn btn-outline" style="font-size:11px;padding:5px 10px;width:auto;color:var(--green);"><i class="fa-solid fa-circle-check"></i> Submitted (Edit)</button>`
+            : `<button onclick="openStudentSubmitHomeworkModal('${a.id}')" class="btn btn-navy" style="font-size:11px;padding:6px 12px;width:auto;"><i class="fa-solid fa-upload"></i> Submit Solution</button>`}
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  async function renderStudentAttendanceSummary(student) {
+    let logs = [];
+    try { logs = await ygsDB.getAttendanceForStudent(student.email); } catch (_) {
+      const all = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+      logs = all.filter(a => (a.studentEmail||'').toLowerCase() === (student.email||'').toLowerCase());
+    }
+    const tbody = document.getElementById('studentAttendanceTbody');
+    if (!logs.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No check-in history yet. Click "Join Live Class" above to mark attendance.</td></tr>';
+      return;
+    }
+    logs.sort((a,b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    tbody.innerHTML = logs.map(l => `
+      <tr>
+        <td><strong>${l.date}</strong> &bull; ${l.time}</td>
+        <td>${l.course}</td>
+        <td><strong>${l.batch}</strong></td>
+        <td><span class="badge badge-approved"><i class="fa-solid fa-check"></i> ${l.status || 'Present'}</span></td>
+      </tr>`).join('');
+  }
+
+  async function submitHomework(hwId) {
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (!user || !user.id) {
+      alert('Error: Please log in again.');
+      return;
+    }
+    showLoader('Submitting homework...');
+    try {
+      const hw = await ygsDB.getAssignmentById(hwId);
+      if (hw) {
+        if (!hw.submissions) hw.submissions = {};
+        hw.submissions[user.id] = {
+          status: 'Submitted',
+          submittedAt: new Date().toISOString()
+        };
+        await ygsDB.saveAssignment(hw);
+      }
+    } catch (_) {}
+    hideLoader();
+    alert('Homework submitted successfully!');
+    await renderStudentHomework(user);
+  }
+
+  // ============================================================
+  //  ADMIN ACTIONS
+  // ============================================================
+  async function toggleStatus(userId, currentStatus, type) {
+    showLoader('Updating account status...');
+    try {
+      const user = await ygsDB.getUserById(userId);
+      if (user) {
+        user.status = currentStatus === 'DEACTIVATED' ? (type === 'teacher' ? 'ACTIVE FACULTY' : 'APPROVED') : 'DEACTIVATED';
+        await ygsDB.saveUser(user);
+      }
+    } catch (_) {}
+    await renderAdmin();
+    hideLoader();
+  }
+
+  async function deleteUser(userId, name) {
+    if (!confirm('Permanently delete "' + name + '"? This cannot be undone.')) return;
+    showLoader('Deleting record...');
+    try { await ygsDB.deleteUser(userId); } catch (_) {}
+    await renderAdmin();
+    hideLoader();
+  }
+
+  async function deleteBatch(batchId) {
+    if (!confirm('Delete this batch?')) return;
+    showLoader('Deleting batch...');
+    try { await ygsDB.deleteBatch(batchId); } catch (_) {}
+    await renderAdmin();
+    hideLoader();
+  }
+
+  // ============================================================
+  //  STUDENT MODAL
+  // ============================================================
+  async function openStudentModal(studentId) {
+    let student = null, teachers = [], batches = [];
+    try {
+      student  = await ygsDB.getUserById(studentId);
+      teachers = await ygsDB.getAllTeachers();
+      batches  = await ygsDB.getAllBatches();
+    } catch (_) {
+      student  = JSON.parse(localStorage.getItem('ygs_students') || '[]').find(s => s.id === studentId) || null;
+      teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+      batches  = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+    }
+    if (!student) return;
+    document.getElementById('sModalId').value          = studentId;
+    document.getElementById('sModalName').textContent  = student.fullName;
+    
+    // Dynamically load batches select list
+    const batchSel = document.getElementById('sModalBatch');
+    batchSel.innerHTML = batches.length
+      ? '<option value="">Select a batch...</option>' + batches.map(b => `<option value="${b.batchNumber}" ${b.batchNumber === student.batch ? 'selected' : ''}>${b.batchNumber} (${b.course})</option>`).join('')
+      : '<option value="">No batches created yet</option>';
+
+    document.getElementById('sModalSchedule').value    = student.schedule || 'Mon - Thu (05:00 PM PST)';
+    document.getElementById('sModalMeet').value        = student.meetLink || 'https://meet.google.com/';
+    document.getElementById('sModalPassword').value    = '';
+    
+    const sel = document.getElementById('sModalTeacher');
+    sel.innerHTML = '<option value="Not Assigned">-- Not Assigned (Assign Later) --</option>' +
+      (teachers.length ? teachers.map(t => `<option value="${t.fullName}" ${t.fullName === student.teacher ? 'selected' : ''}>${t.fullName} (${t.assignedCourse || t.qualification || 'Teacher'})</option>`).join('') : '');
+    document.getElementById('studentModal').style.display = 'flex';
+  }
+
+  async function autofillStudentBatchDetails() {
+    const batchNum = document.getElementById('sModalBatch').value;
+    if (!batchNum) return;
+    try {
+      const batches = await ygsDB.getAllBatches();
+      const b = batches.find(x => x.batchNumber === batchNum);
+      if (b) {
+        document.getElementById('sModalSchedule').value = b.schedule;
+        document.getElementById('sModalMeet').value = b.meetLink;
+        if (b.teacher) {
+          const teacherSel = document.getElementById('sModalTeacher');
+          for (let opt of teacherSel.options) {
+            if (opt.value.trim().toLowerCase() === b.teacher.trim().toLowerCase()) {
+              opt.selected = true;
+              break;
+            }
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  async function submitStudentModal(e) {
+    e.preventDefault();
+    const id       = document.getElementById('sModalId').value;
+    const batch    = document.getElementById('sModalBatch').value;
+    const teacher  = document.getElementById('sModalTeacher').value;
+    const password = document.getElementById('sModalPassword').value.trim();
+    const schedule = document.getElementById('sModalSchedule').value.trim();
+    const meetLink = document.getElementById('sModalMeet').value.trim();
+
+    btnLoading('saveStudentBtn', 'Saving...');
+    showLoader('Saving student data...');
+
+    try {
+      const student = await ygsDB.getUserById(id);
+      if (student) {
+        student.status = 'APPROVED'; student.batch = batch; student.teacher = teacher;
+        student.schedule = schedule; student.meetLink = meetLink;
+        if (password) student.password = password;
+        await ygsDB.saveUser(student);
+      }
+    } catch (_) {
+      const all = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+      const idx = all.findIndex(s => s.id === id);
+      if (idx >= 0) {
+        all[idx] = { ...all[idx], status: 'APPROVED', batch, teacher, schedule, meetLink, ...(password ? { password } : {}) };
+        localStorage.setItem('ygs_students', JSON.stringify(all));
+      }
+    } finally {
+      closeOverlay('studentModal');
+      hideLoader();
+      btnDone('saveStudentBtn');
+    }
+
+    alert('Student updated! Teacher [' + teacher + '] assigned. Student is now visible in teacher dashboard.');
+    
+    // Refresh admin data in background
+    renderAdmin().catch(err => console.warn('Background refresh error:', err));
+  }
+
+  // ============================================================
+  //  TEACHER MODAL
+  // ============================================================
+  async function openTeacherModal(teacherId) {
+    document.getElementById('tModalId').value    = '';
+    document.getElementById('tModalName').value  = '';
+    document.getElementById('tModalEmail').value = '';
+    document.getElementById('tModalPass').value  = '';
+    document.getElementById('tModalQual').value  = '';
+    document.getElementById('tModalSpec').value  = '';
+    document.getElementById('tModalTitle').textContent = 'Add Teacher Profile';
+    
+    // Fetch and render active batches checkbox list
+    let batches = [];
+    try { batches = await ygsDB.getAllBatches(); } catch(_) {
+      batches = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+    }
+    
+    let assigned = [];
+    let teacher = null;
+    
+    if (teacherId) {
+      try {
+        teacher = await ygsDB.getUserById(teacherId);
+        if (teacher) {
+          document.getElementById('tModalId').value     = teacher.id;
+          document.getElementById('tModalName').value   = teacher.fullName;
+          document.getElementById('tModalEmail').value  = teacher.email;
+          document.getElementById('tModalPass').value   = teacher.password;
+          document.getElementById('tModalCourse').value = teacher.assignedCourse || 'German A1 - Foundational';
+          document.getElementById('tModalQual').value   = teacher.qualification || '';
+          document.getElementById('tModalSpec').value   = teacher.specialization || '';
+          document.getElementById('tModalTitle').textContent = 'Edit Teacher Profile';
+          assigned = teacher.assignedBatches || [];
+        }
+      } catch (_) {}
+    }
+    
+    const container = document.getElementById('tModalBatchesContainer');
+    if (batches.length === 0) {
+      container.innerHTML = '<span style="font-size:12px;color:var(--text-muted);grid-column:span 2;">No batches created yet.</span>';
+    } else {
+      container.innerHTML = batches.map(b => {
+        const isChecked = assigned.includes(b.batchNumber);
+        return `
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; font-weight:600; background:#fff; padding:6px 10px; border-radius:6px; border:1px solid #cbd5e1; margin:0;">
+            <input type="checkbox" class="t-batch-chk" value="${b.batchNumber}" ${isChecked ? 'checked' : ''}>
+            ${b.batchNumber}
+          </label>
+        `;
+      }).join('');
+    }
+    
+    document.getElementById('teacherModal').style.display = 'flex';
+  }
+
+  async function submitTeacherModal(e) {
+    e.preventDefault();
+    const editId = document.getElementById('tModalId').value;
+    const name   = document.getElementById('tModalName').value.trim();
+    const email  = document.getElementById('tModalEmail').value.trim().toLowerCase();
+    const pass   = document.getElementById('tModalPass').value.trim();
+    const course = document.getElementById('tModalCourse').value;
+    const qual   = document.getElementById('tModalQual').value.trim();
+    const spec   = document.getElementById('tModalSpec').value.trim();
+
+    // Get selected batches from checkboxes
+    const chks = document.querySelectorAll('.t-batch-chk:checked');
+    const selectedBatches = Array.from(chks).map(c => c.value);
+
+    btnLoading('saveTeacherBtn', 'Saving...');
+    showLoader('Saving teacher profile...');
+
+    const teacher = {
+      id: editId || ('TCH-' + Date.now()), fullName: name, email, password: pass,
+      role: 'TEACHER', assignedCourse: course, qualification: qual, specialization: spec,
+      assignedBatches: selectedBatches,
+      status: 'ACTIVE FACULTY', createdAt: new Date().toISOString()
+    };
+    
+    try {
+      try { await ygsDB.saveUser(teacher); } catch (_) {}
+      const all = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+      const idx = all.findIndex(t => t.id === teacher.id);
+      if (idx >= 0) all[idx] = teacher; else all.push(teacher);
+      localStorage.setItem('ygs_teachers', JSON.stringify(all));
+
+      // Relations Sync: Update batches teacher field
+      try {
+        const batches = await ygsDB.getAllBatches();
+        for (const b of batches) {
+          const isAssigned = selectedBatches.includes(b.batchNumber);
+          const isCurrentTeacher = (b.teacher || '').trim().toLowerCase() === name.toLowerCase();
+          
+          if (isAssigned && !isCurrentTeacher) {
+            b.teacher = name;
+            await ygsDB.saveBatch(b);
+          } else if (!isAssigned && isCurrentTeacher) {
+            b.teacher = 'Not Assigned';
+            await ygsDB.saveBatch(b);
+          }
+        }
+      } catch(err) {
+        console.warn('Relations sync failed:', err);
+      }
+    } finally {
+      closeOverlay('teacherModal');
+      hideLoader();
+      btnDone('saveTeacherBtn');
+    }
+
+    alert('Teacher saved!\n\nEmail: ' + email + '\nAssigned Batches: ' + (selectedBatches.join(', ') || 'None'));
+    
+    // Refresh admin data in background
+    renderAdmin().catch(err => console.warn('Background refresh error:', err));
+  }
+
+  // ============================================================
+  //  BATCH MODAL & SCHEDULER
+  // ============================================================
+  function toggleDayActive(day) {
+    const chk = document.querySelector(`.day-chk[data-day="${day}"]`);
+    const timeInp = document.getElementById(`time_${day}`);
+    const badge = document.getElementById(`badge_${day}`);
+    if (chk.checked) {
+      timeInp.style.visibility = 'visible';
+      badge.className = 'badge badge-approved';
+      badge.textContent = 'Class';
+      badge.style.background = '';
+      badge.style.color = '';
+    } else {
+      timeInp.style.visibility = 'hidden';
+      badge.className = 'badge badge-pending';
+      badge.textContent = 'Off Day';
+      badge.style.background = '#e2e8f0';
+      badge.style.color = '#64748b';
+    }
+  }
+
+  function toggleBatchTimeConfig() {
+    const isSame = document.getElementById('bTimeConfigSame').checked;
+    document.getElementById('bGlobalTimeRow').style.display = isSame ? 'flex' : 'none';
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    days.forEach(day => {
+      const timeInp = document.getElementById(`time_${day}`);
+      if (isSame) {
+        timeInp.disabled = true;
+        timeInp.value = document.getElementById('bGlobalTime').value;
+      } else {
+        timeInp.disabled = false;
+      }
+    });
+  }
+
+  function applyGlobalTimeToActiveDays() {
+    const isSame = document.getElementById('bTimeConfigSame').checked;
+    if (!isSame) return;
+    const globalVal = document.getElementById('bGlobalTime').value;
+    ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].forEach(day => {
+      document.getElementById(`time_${day}`).value = globalVal;
+    });
+  }
+
+  function serializeScheduleData() {
+    const isSame = document.getElementById('bTimeConfigSame').checked;
+    const globalTime = document.getElementById('bGlobalTime').value;
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    const schedObj = {
+      isSameTime: isSame,
+      globalTime: globalTime,
+      days: {}
+    };
+    
+    let activeDays = [];
+    let customParts = [];
+    
+    days.forEach(day => {
+      const chk = document.querySelector(`.day-chk[data-day="${day}"]`);
+      const isClass = chk.checked;
+      const timeVal = document.getElementById(`time_${day}`).value;
+      
+      schedObj.days[day] = {
+        isClass: isClass,
+        time: isClass ? (isSame ? globalTime : timeVal) : ''
+      };
+      
+      if (isClass) {
+        const dayShort = day.substr(0, 3);
+        activeDays.push(dayShort);
+        customParts.push(`${dayShort} (${formatTime12h(isSame ? globalTime : timeVal)})`);
+      }
+    });
+    
+    const readableText = isSame 
+      ? (activeDays.length > 0 ? activeDays.join(', ') + ` (${formatTime12h(globalTime)})` : 'No classes scheduled')
+      : (customParts.length > 0 ? customParts.join(', ') : 'No classes scheduled');
+      
+    return {
+      text: readableText,
+      data: schedObj
+    };
+  }
+
+  function formatTime12h(t) {
+    if (!t) return '';
+    const parts = t.split(':');
+    let h = parseInt(parts[0]);
+    const m = parts[1] || '00';
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+  }
+
+  function convertTimeWithTimezones(timeStr, fromTz, toTz) {
+    if (!timeStr) return '';
+    if (!fromTz) fromTz = 'Asia/Karachi';
+    if (!toTz) toTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Karachi';
+    if (fromTz === toTz) return '';
+    try {
+      const getOffset = (tz, dVal) => {
+        const parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          timeZoneName: 'longOffset'
+        }).formatToParts(dVal);
+        const tzPart = parts.find(p => p.type === 'timeZoneName');
+        if (!tzPart) return 0;
+        const val = tzPart.value;
+        if (val === 'GMT' || val === 'UTC') return 0;
+        const match = val.match(/GMT([+-])(\d+)(?::(\d+))?/);
+        if (!match) return 0;
+        const sign = match[1] === '+' ? 1 : -1;
+        const h = parseInt(match[2]);
+        const m = parseInt(match[3] || '0');
+        return sign * (h * 60 + m);
+      };
+      const date = new Date();
+      const fromOffset = getOffset(fromTz, date);
+      const toOffset = getOffset(toTz, date);
+      const diffMinutes = toOffset - fromOffset;
+      const [h, m] = timeStr.split(':').map(Number);
+      let targetMinutes = h * 60 + m + diffMinutes;
+      targetMinutes = (targetMinutes + 24 * 60) % (24 * 60);
+      const finalH = String(Math.floor(targetMinutes / 60)).padStart(2, '0');
+      const finalM = String(targetMinutes % 60).padStart(2, '0');
+      return `${finalH}:${finalM}`;
+    } catch(_) { return ''; }
+  }
+
+  function renderVisualTimetableHTML(sched, batchTimezone) {
+    if (!sched) return '<span style="font-size:12px;color:var(--text-muted);">No schedule configured</span>';
+    let obj = sched;
+    if (typeof sched === 'string') {
+      try { obj = JSON.parse(sched); } catch(_) {
+        return `
+          <div style="font-size:12px; color:var(--navy-light); font-weight:600; margin-top:2px;">
+            <i class="fa-solid fa-clock"></i> ${sched}
+          </div>
+        `;
+      }
+    }
+    if (!obj || !obj.days) return '<span style="font-size:12px;color:var(--text-muted);">No schedule configured</span>';
+    
+    const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    let html = `<div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; width:100%;">`;
+    
+    const viewerTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Karachi';
+    const bTz = batchTimezone || 'Asia/Karachi';
+    const fromLabel = bTz === 'Asia/Karachi' ? 'PKT' : bTz === 'Europe/Berlin' ? 'CET' : 'UTC';
+    const toLabel = viewerTz === 'Asia/Karachi' ? 'PKT' : viewerTz === 'Europe/Berlin' ? 'CET' : 'Local';
+
+    dayOrder.forEach(day => {
+      const d = obj.days[day] || { isClass: false, time: '' };
+      const dayShort = day.substr(0, 3);
+      if (d.isClass) {
+        const converted = convertTimeWithTimezones(d.time, bTz, viewerTz);
+        const timeDisp = converted 
+          ? `<span style="font-size:9px;color:var(--text-muted);opacity:0.85;">${formatTime12h(d.time)} (${fromLabel})</span><br><span style="font-size:10px;font-weight:800;color:var(--navy-dark);">${formatTime12h(converted)} (${toLabel})</span>`
+          : `${formatTime12h(d.time)} (${fromLabel})`;
+        html += `
+          <div style="flex:1; min-width:85px; text-align:center; padding:6px 4px; border-radius:6px; background:#dcfce7; border:1px solid #86efac; color:#15803d; box-shadow:var(--shadow-sm); line-height:1.25;">
+            <div style="font-size:10px; font-weight:800; text-transform:uppercase;">${dayShort}</div>
+            <div style="margin-top:2px; white-space:nowrap;">${timeDisp}</div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div style="flex:1; min-width:85px; text-align:center; padding:6px 4px; border-radius:6px; background:#f1f5f9; border:1px solid #cbd5e1; color:#94a3b8; opacity:0.8;">
+            <div style="font-size:10px; font-weight:800; text-transform:uppercase;">${dayShort}</div>
+            <div style="font-size:10px; font-weight:600; margin-top:2px;">Off</div>
+          </div>
+        `;
+      }
+    });
+    
+    html += `</div>`;
+    return html;
+  }
+
+  async function openClassModal() {
+    let teachers = [];
+    try { teachers = await ygsDB.getAllTeachers(); } catch (_) {
+      teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+    }
+    const sel = document.getElementById('bModalTeacher');
+    sel.innerHTML = '<option value="Not Assigned">-- Not Assigned (Assign Later) --</option>' +
+      (teachers.length ? teachers.map(t => `<option value="${t.fullName}">${t.fullName} (${t.assignedCourse || t.qualification || 'Teacher'})</option>`).join('') : '');
+      
+    // Reset Form Schedule selections to defaults
+    document.getElementById('bModalBatch').value = '';
+    document.getElementById('bModalMeet').value = '';
+    document.getElementById('bModalLateLimit').value = '10';
+    document.getElementById('bTimeConfigSame').checked = true;
+    document.getElementById('bGlobalTime').value = '19:00';
+    document.getElementById('bModalStart').value = new Date().toISOString().split('T')[0];
+    document.getElementById('bModalTimezone').value = 'Asia/Karachi';
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    days.forEach(day => {
+      const chk = document.querySelector(`.day-chk[data-day="${day}"]`);
+      if (chk) {
+        chk.checked = (day !== 'Saturday' && day !== 'Sunday');
+        toggleDayActive(day);
+      }
+      const timeInp = document.getElementById(`time_${day}`);
+      if (timeInp) {
+        timeInp.value = '19:00';
+      }
+    });
+    toggleBatchTimeConfig();
+    
+    document.getElementById('batchModal').style.display = 'flex';
+  }
+
+  async function submitBatchModal(e) {
+    e.preventDefault();
+    const schedInfo = serializeScheduleData();
+    const startVal  = document.getElementById('bModalStart').value;
+    const courseVal = document.getElementById('bModalCourse').value;
+    
+    // Auto-calculate end date (A1-A2 = 2 months, B1-B2 = 3 months)
+    const startDate = startVal ? new Date(startVal) : new Date();
+    startDate.setHours(0,0,0,0);
+    const durationDays = (courseVal.includes('A1') || courseVal.includes('A2')) ? 60 : 90;
+    const endDate = new Date(startDate.getTime());
+    endDate.setDate(endDate.getDate() + durationDays);
+
+    const batch = {
+      id: 'BCH-' + Date.now(),
+      batchNumber: document.getElementById('bModalBatch').value.trim(),
+      course:      courseVal,
+      teacher:     document.getElementById('bModalTeacher').value,
+      schedule:    schedInfo.text,
+      scheduleData: schedInfo.data,
+      timezone:    document.getElementById('bModalTimezone').value,
+      startDate:   startDate.toISOString().split('T')[0],
+      endDate:     endDate.toISOString().split('T')[0],
+      meetLink:    document.getElementById('bModalMeet').value.trim(),
+      lateLimit:   parseInt(document.getElementById('bModalLateLimit').value) || 10,
+      createdAt:   new Date().toISOString()
+    };
+    btnLoading('saveBatchBtn', 'Saving...');
+    showLoader('Creating batch...');
+    try {
+      await ygsDB.saveBatch(batch);
+    } catch (_) {
+      const all = JSON.parse(localStorage.getItem('ygs_batches') || '[]');
+      const idx = all.findIndex(b => b.id === batch.id);
+      if (idx >= 0) all[idx] = batch; else all.push(batch);
+      localStorage.setItem('ygs_batches', JSON.stringify(all));
+    } finally {
+      closeOverlay('batchModal');
+      hideLoader();
+      btnDone('saveBatchBtn');
+    }
+    alert('Batch ' + batch.batchNumber + ' created successfully.');
+    
+    // Refresh admin data in background
+    renderAdmin().catch(err => console.warn('Background refresh error:', err));
+  }
+
+  // ============================================================
+  //  HOMEWORK MANAGEMENT (Requirement #2)
+  // ============================================================
+  async function renderTeacherHomework(teacher) {
+    let all = [];
+    try { all = await ygsDB.getAllAssignments(); } catch (_) { all = []; }
+    const course = teacher.assignedCourse || 'German A1 - Foundational';
+    const filtered = all.filter(a => a.course === course);
+    
+    const tbody = document.getElementById('teacherHwTbody');
+    if (!tbody) return;
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No homework assignments created for your course level yet. Click "Create Homework" to publish one.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = filtered.map(a => {
+      const subCount = Object.keys(a.submissions || {}).length;
+      return `
+      <tr>
+        <td>
+          <strong>${a.title}</strong>
+          ${a.attachment ? `
+            <br>
+            <button onclick="downloadOrViewAttachment('${a.id}', 'teacher')" class="btn btn-outline" style="font-size:10px; padding:2px 6px; width:auto; margin-top:4px; line-height:1;"><i class="fa-solid fa-paperclip" style="color:var(--gold);"></i> 📄 Teacher File: ${a.attachment.name}</button>
+          ` : ''}
+        </td>
+        <td>${a.course}</td>
+        <td>${formatDateTime(a.dueDate)}</td>
+        <td style="text-align:center;">
+          <button onclick="openTeacherSubmissionsModal('${a.id}')" class="btn btn-green" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-file-user"></i> Submissions (${subCount})</button>
+          <button onclick="openHomeworkModal('${a.id}')" class="btn btn-outline" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+          <button onclick="deleteHomework('${a.id}')" class="btn btn-red" style="font-size:11px;padding:5px 8px;width:auto;"><i class="fa-solid fa-trash"></i> Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function openHomeworkModal(hwId) {
+    document.getElementById('hwModalId').value = '';
+    document.getElementById('hwModalTitle').value = '';
+    document.getElementById('hwModalDue').value = '';
+    document.getElementById('hwModalFile').value = '';
+    document.getElementById('hwAttachedLabel').textContent = '';
+    document.getElementById('hwModalTitleLabel').textContent = 'Publish Homework Assignment';
+    
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || 'null');
+    if (user && user.role === 'TEACHER') {
+      document.getElementById('hwModalCourse').value = user.assignedCourse || 'German A1 - Foundational';
+    }
+    
+    if (hwId) {
+      try {
+        let all = [];
+        try { all = await ygsDB.getAllAssignments(); } catch (_) {}
+        const a = all.find(x => x.id === hwId);
+        if (a) {
+          document.getElementById('hwModalId').value = a.id;
+          document.getElementById('hwModalTitle').value = a.title;
+          document.getElementById('hwModalCourse').value = a.course;
+          document.getElementById('hwModalDue').value = a.dueDate;
+          document.getElementById('hwModalTitleLabel').textContent = 'Update Homework Assignment';
+          if (a.attachment) {
+            document.getElementById('hwAttachedLabel').textContent = 'Attached: ' + a.attachment.name;
+          }
+        }
+      } catch(_) {}
+    }
+    
+    document.getElementById('homeworkModal').style.display = 'flex';
+  }
+
+  async function deleteHomework(hwId) {
+    if (!confirm('Are you sure you want to delete this homework assignment? This will also remove all student marks for this assignment.')) return;
+    showLoader('Deleting homework...');
+    try {
+      let all = [];
+      try { all = await ygsDB.getAllAssignments(); } catch (_) {}
+      const filtered = all.filter(a => a.id !== hwId);
+      try { await ygsDB.deleteAssignment(hwId); } catch(_) {}
+      localStorage.setItem('ygs_assignments', JSON.stringify(filtered));
+    } catch(err) {
+      console.warn('Failed to delete assignment:', err);
+    }
+    hideLoader();
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+    await showTeacher(user);
+  }
+
+  async function submitHomeworkModal(e) {
+    e.preventDefault();
+    const editId = document.getElementById('hwModalId').value;
+    const title  = document.getElementById('hwModalTitle').value.trim();
+    const course = document.getElementById('hwModalCourse').value;
+    const due    = document.getElementById('hwModalDue').value;
+    const fileEl = document.getElementById('hwModalFile');
+
+    btnLoading('saveHomeworkBtn', 'Saving...');
+    showLoader('Saving homework...');
+
+    let hw = {
+      id: editId || ('HW-' + Date.now()),
+      title: title,
+      course: course,
+      dueDate: due,
+      status: 'Pending',
+      teacherRemarks: 'Complete all questions.',
+      createdAt: new Date().toISOString()
+    };
+
+    if (editId) {
+      try {
+        let all = [];
+        try { all = await ygsDB.getAllAssignments(); } catch (_) {}
+        const existing = all.find(x => x.id === editId);
+        if (existing) {
+          hw = { ...existing, ...hw };
+        }
+      } catch(_) {}
+    }
+
+    const saveAndRecover = async () => {
+      try {
+        await ygsDB.saveAssignment(hw);
+        const all = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+        const idx = all.findIndex(a => a.id === hw.id);
+        if (idx >= 0) all[idx] = hw; else all.push(hw);
+        localStorage.setItem('ygs_assignments', JSON.stringify(all));
+      } catch (err) {
+        console.warn('Save assignment error:', err);
+      } finally {
+        closeOverlay('homeworkModal');
+        hideLoader();
+        btnDone('saveHomeworkBtn');
+      }
+      alert('Homework saved successfully.');
+      const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+      showTeacher(user).catch(err => console.warn('Background refresh error:', err));
+    };
+
+    if (fileEl.files && fileEl.files[0]) {
+      const file = fileEl.files[0];
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        hw.attachment = {
+          name: file.name,
+          data: evt.target.result // Base64 data url
+        };
+        await saveAndRecover();
+      };
+      reader.onerror = async function() {
+        console.warn('File reading failed');
+        await saveAndRecover();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      await saveAndRecover();
+    }
+  }
+
+  function formatDateTime(val) {
+    if (!val) return 'N/A';
+    if (!val.includes('T')) return val; // Legacy support
+    try {
+      const d = new Date(val);
+      if (isNaN(d.getTime())) return val;
+      return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) + ' ' + d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    } catch(_) {
+      return val;
+    }
+  }
+
+  // ── TIMETABLE VOTING POLLS (Requirement #1.2) ──
+  function openCreatePollModal(batchNumber) {
+    document.getElementById('pModalBatch').value = batchNumber;
+    document.getElementById('pModalBatchName').value = batchNumber;
+    document.getElementById('pModalOptions').value = '';
+    document.getElementById('createPollModal').style.display = 'flex';
+  }
+
+  async function submitCreatePoll(e) {
+    e.preventDefault();
+    const batch = document.getElementById('pModalBatch').value;
+    const optText = document.getElementById('pModalOptions').value;
+    const options = optText.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+
+    if (options.length < 2) {
+      alert('Please provide at least 2 timing options.');
+      return;
+    }
+
+    btnLoading('savePollBtn', 'Launching...');
+    showLoader('Launching poll...');
+
+    const poll = {
+      id: 'POL-' + Date.now(),
+      batchNumber: batch,
+      proposedTimes: options,
+      votes: {},
+      status: 'ACTIVE',
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await ygsDB.savePoll(poll);
+    } catch (_) {} finally {
+      closeOverlay('createPollModal');
+      hideLoader();
+      btnDone('savePollBtn');
+    }
+    alert('Timetable Poll launched successfully!');
+    renderAdmin().catch(err => console.warn(err));
+  }
+
+  async function checkForActivePolls(user) {
+    if (!user || !user.id) return;
+    let polls = [];
+    try { polls = await ygsDB.getAllPolls(); } catch(_) {
+      polls = JSON.parse(localStorage.getItem('ygs_polls') || '[]');
+    }
+
+    const batchNum = user.batch || '';
+    const assigned = user.assignedBatches || [];
+    
+    // Find active poll that matches user's batch and user hasn't voted on
+    const activePoll = polls.find(p => p.status === 'ACTIVE' && (p.batchNumber === batchNum || assigned.includes(p.batchNumber)));
+    if (!activePoll) return;
+
+    const votes = activePoll.votes || {};
+    if (votes[user.id]) return; // already voted!
+
+    document.getElementById('vModalPollId').value = activePoll.id;
+    document.getElementById('vModalBatchDisplay').textContent = activePoll.batchNumber;
+    document.getElementById('vModalRemarks').value = '';
+
+    const container = document.getElementById('vModalOptionsContainer');
+    container.innerHTML = activePoll.proposedTimes.map((opt, i) => `
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:700; font-size:13px; color:var(--navy-dark); padding:6px 0;">
+        <input type="radio" name="vModalOptionChoice" value="${opt}" ${i===0?'checked':''} required>
+        <span>${opt}</span>
+      </label>
+    `).join('');
+
+    document.getElementById('votePollModal').style.display = 'flex';
+  }
+
+  async function submitVotePoll(e) {
+    e.preventDefault();
+    const pollId = document.getElementById('vModalPollId').value;
+    const choice = document.querySelector('input[name="vModalOptionChoice"]:checked').value;
+    const remark = document.getElementById('vModalRemarks').value.trim();
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+
+    if (!user.id) {
+      alert('Session expired. Please log in again.');
+      return;
+    }
+
+    showLoader('Submitting vote...');
+    try {
+      const polls = await ygsDB.getAllPolls();
+      const poll = polls.find(p => p.id === pollId);
+      if (poll) {
+        if (!poll.votes) poll.votes = {};
+        poll.votes[user.id] = {
+          choice,
+          remark,
+          userName: user.fullName || 'Anonymous',
+          role: user.role,
+          date: new Date().toISOString()
+        };
+        await ygsDB.savePoll(poll);
+      }
+    } catch (err) {
+      console.warn('Failed to submit vote:', err);
+    } finally {
+      closeOverlay('votePollModal');
+      hideLoader();
+    }
+
+    alert('Thank you! Your vote has been recorded.');
+  }
+
+  async function viewPollRemarks(pollId) {
+    let polls = [];
+    try { polls = await ygsDB.getAllPolls(); } catch(_) {
+      polls = JSON.parse(localStorage.getItem('ygs_polls') || '[]');
+    }
+    const poll = polls.find(p => p.id === pollId);
+    const container = document.getElementById('pRemarksContainer');
+    if (!poll || !poll.votes || Object.keys(poll.votes).length === 0) {
+      container.innerHTML = '<div style="color:var(--text-muted); font-style:italic;">No remarks submitted yet.</div>';
+    } else {
+      container.innerHTML = Object.entries(poll.votes).map(([uid, v]) => `
+        <div style="background:var(--bg-section); padding:10px; border-radius:8px; border:1px solid var(--border-subtle); font-size:12px;">
+          <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:4px;">
+            <span>${v.userName} (${v.role})</span>
+            <span style="color:var(--accent-gold); font-size:11px;">Preferred: ${v.choice}</span>
+          </div>
+          <div style="color:var(--navy-dark); font-style:italic; border-top:1px dashed #cbd5e1; padding-top:4px; margin-top:4px;">
+            ${v.remark || '(No written comment)'}
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById('viewPollRemarksModal').style.display = 'flex';
+  }
+
+  async function closePoll(pollId) {
+    if (!confirm('Are you sure you want to resolve and close this poll? This will lock current voting results.')) return;
+    showLoader('Closing poll...');
+    try {
+      const polls = await ygsDB.getAllPolls();
+      const poll = polls.find(p => p.id === pollId);
+      if (poll) {
+        poll.status = 'RESOLVED';
+        await ygsDB.savePoll(poll);
+      }
+    } catch (_) {}
+    hideLoader();
+    alert('Poll resolved and locked.');
+    renderAdmin().catch(err => console.warn(err));
+  }
+
+  async function downloadOrViewAttachment(hwId, type = 'teacher', studentId = null) {
+    let assignments = [];
+    try { assignments = await ygsDB.getAllAssignments(); } catch (_) {
+      assignments = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+    }
+    const a = assignments.find(x => x.id === hwId);
+    if (!a) { alert('Assignment not found.'); return; }
+    
+    let file = null;
+    let fileSource = 'Teacher';
+    if (type === 'teacher') {
+      file = a.attachment;
+      fileSource = 'Teacher';
+    } else if (type === 'student' && studentId) {
+      const sub = (a.submissions || {})[studentId];
+      if (sub && sub.attachment) {
+        file = sub.attachment;
+        fileSource = 'Student';
+      }
+    }
+
+    if (!file || !file.data) {
+      alert('Attachment not found.');
+      return;
+    }
+
+    const fileData = file.data;
+    const fileName = file.name || 'document';
+    const isImage = fileData.startsWith('data:image/') || /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(fileName);
+    const isPdf   = fileData.startsWith('data:application/pdf') || /\.pdf$/i.test(fileName);
+
+    let viewer = document.getElementById('imageViewerModal');
+    if (!viewer) {
+      const div = document.createElement('div');
+      div.id = 'imageViewerModal';
+      div.className = 'overlay';
+      div.style.zIndex = '99999';
+      div.style.display = 'none';
+      div.style.position = 'fixed';
+      div.style.top = '0'; div.style.left = '0'; div.style.width = '100vw'; div.style.height = '100vh';
+      div.style.background = 'rgba(15,23,42,0.85)'; div.style.alignItems = 'center'; div.style.justifyContent = 'center';
+      div.innerHTML = `
+        <div class="modal" style="background:#fff; border-radius:12px; padding:20px; width:92%; max-width:900px; max-height:92vh; display:flex; flex-direction:column; align-items:center; box-shadow:0 12px 36px rgba(0,0,0,0.3);">
+          <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:10px;">
+            <div>
+              <h4 id="ivTitle" style="margin:0; font-family:'Outfit',sans-serif; color:#0f172a; font-size:16px; font-weight:800;">Attachment Preview</h4>
+              <span id="ivBadge" style="font-size:10px; padding:2px 8px; border-radius:12px; background:#fef3c7; color:#92400e; font-weight:800; display:inline-block; margin-top:2px;">Source</span>
+            </div>
+            <button onclick="document.getElementById('imageViewerModal').style.display='none'" class="btn btn-outline" style="width:auto; padding:5px 12px; font-size:12px; cursor:pointer; font-weight:700;">✕ Close</button>
+          </div>
+          
+          <div id="ivBody" style="flex:1; width:100%; display:flex; justify-content:center; align-items:center; overflow:auto; padding:6px 0;">
+            <!-- Image or PDF or Document Iframe -->
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end; width:100%; border-top:1px solid #e2e8f0; padding-top:10px;">
+            <a id="ivDownloadLink" class="btn btn-navy" style="width:auto; text-decoration:none; padding:7px 18px; border-radius:6px; color:#fff; background:#0f172a; font-weight:700; font-size:12px;"><i class="fa-solid fa-download"></i> Download Local Copy</a>
+            <button onclick="document.getElementById('imageViewerModal').style.display='none'" class="btn btn-outline" style="width:auto; padding:7px 18px; border-radius:6px; border:1px solid #cbd5e1; cursor:pointer; font-size:12px; font-weight:700;">Close Preview</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(div);
+      viewer = div;
+    }
+
+    document.getElementById('ivTitle').textContent = fileName;
+    document.getElementById('ivBadge').textContent = fileSource === 'Teacher' ? '📄 Uploaded by Teacher (Instructor Assignment)' : '📤 Uploaded by Student (Solution Submission)';
+
+    const bodyEl = document.getElementById('ivBody');
+    if (isImage) {
+      bodyEl.innerHTML = `<img src="${fileData}" style="max-width:100%; max-height:70vh; border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.15); object-fit:contain;">`;
+    } else if (isPdf) {
+      bodyEl.innerHTML = `<iframe src="${fileData}" style="width:100%; height:72vh; border:none; border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.15);"></iframe>`;
+    } else {
+      bodyEl.innerHTML = `<iframe src="${fileData}" style="width:100%; height:68vh; border:1px solid #cbd5e1; border-radius:8px; background:#fff;"></iframe>`;
+    }
+
+    const link = document.getElementById('ivDownloadLink');
+    link.href = fileData;
+    link.download = fileName;
+
+    viewer.style.display = 'flex';
+  }
+
+  // ── STUDENT HOMEWORK FILE SUBMISSION (Requirement: Student Attachments) ──
+  async function openStudentSubmitHomeworkModal(hwId) {
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+    if (!user || !user.id) { alert('Please log in again.'); return; }
+
+    let all = [];
+    try { all = await ygsDB.getAllAssignments(); } catch (_) {
+      all = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+    }
+    const a = all.find(x => x.id === hwId);
+    if (!a) { alert('Assignment not found.'); return; }
+
+    document.getElementById('sSubHwId').value = a.id;
+    document.getElementById('sSubModalTitle').textContent = 'Submit Solution for: ' + a.title;
+    document.getElementById('sSubNotes').value = '';
+    document.getElementById('sSubFile').value = '';
+    document.getElementById('sSubExistingFileLabel').textContent = '';
+
+    const tBox = document.getElementById('sSubTeacherAttachBox');
+    const tContent = document.getElementById('sSubTeacherAttachContent');
+    if (a.attachment) {
+      tBox.style.display = 'block';
+      tContent.innerHTML = `
+        <button type="button" onclick="downloadOrViewAttachment('${a.id}', 'teacher')" class="btn btn-outline" style="font-size:11px; padding:4px 10px; width:auto; border-color:#cbd5e1; background:#fff;">
+          <i class="fa-solid fa-download"></i> 📄 Download Teacher File: <strong>${a.attachment.name}</strong>
+        </button>
+      `;
+    } else {
+      tBox.style.display = 'none';
+    }
+
+    const sub = (a.submissions || {})[user.id];
+    if (sub) {
+      if (sub.notes) document.getElementById('sSubNotes').value = sub.notes;
+      if (sub.attachment) {
+        document.getElementById('sSubExistingFileLabel').textContent = 'Currently Attached Student File: ' + sub.attachment.name;
+      }
+    }
+
+    document.getElementById('studentSubmitHomeworkModal').style.display = 'flex';
+  }
+
+  async function saveStudentSubmission(e) {
+    e.preventDefault();
+    const hwId = document.getElementById('sSubHwId').value;
+    const notes = document.getElementById('sSubNotes').value.trim();
+    const fileEl = document.getElementById('sSubFile');
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+
+    if (!user.id) { alert('Session expired. Please log in.'); return; }
+
+    btnLoading('saveStudentSubBtn', 'Submitting...');
+    showLoader('Saving submission...');
+
+    let all = [];
+    try { all = await ygsDB.getAllAssignments(); } catch (_) {
+      all = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+    }
+    const hw = all.find(x => x.id === hwId);
+    if (!hw) { hideLoader(); alert('Assignment not found.'); return; }
+
+    if (!hw.submissions) hw.submissions = {};
+    const existingSub = hw.submissions[user.id] || {};
+
+    const newSub = {
+      ...existingSub,
+      status: 'Submitted',
+      submittedAt: new Date().toISOString(),
+      notes: notes,
+      studentName: user.fullName || 'Student',
+      studentEmail: user.email
+    };
+
+    const commitSave = async () => {
+      hw.submissions[user.id] = newSub;
+      try {
+        await ygsDB.saveAssignment(hw);
+        const ls = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+        const idx = ls.findIndex(x => x.id === hw.id);
+        if (idx >= 0) ls[idx] = hw; else ls.push(hw);
+        localStorage.setItem('ygs_assignments', JSON.stringify(ls));
+      } catch(err) {
+        console.warn('Submission save warning:', err);
+      }
+      closeOverlay('studentSubmitHomeworkModal');
+      hideLoader();
+      btnDone('saveStudentSubBtn');
+      alert('Your homework solution and attachment have been submitted successfully!');
+      renderStudentHomework(user).catch(() => {});
+    };
+
+    if (fileEl.files && fileEl.files[0]) {
+      const file = fileEl.files[0];
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        newSub.attachment = {
+          name: file.name,
+          data: evt.target.result // Base64
+        };
+        await commitSave();
+      };
+      reader.onerror = async function() {
+        console.warn('File read error');
+        await commitSave();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      await commitSave();
+    }
+  }
+
+  // ── TEACHER VIEW STUDENT SUBMISSIONS & ATTACHMENTS ──
+  async function openTeacherSubmissionsModal(hwId) {
+    let all = [];
+    try { all = await ygsDB.getAllAssignments(); } catch (_) {
+      all = JSON.parse(localStorage.getItem('ygs_assignments') || '[]');
+    }
+    const a = all.find(x => x.id === hwId);
+    if (!a) { alert('Assignment not found.'); return; }
+
+    document.getElementById('tSubModalTitle').textContent = 'Submissions for: ' + a.title;
+    const container = document.getElementById('tSubmissionsList');
+    const subs = a.submissions || {};
+    const entries = Object.entries(subs);
+
+    if (!entries.length) {
+      container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted); font-style:italic;">No student submissions received yet for this assignment.</div>';
+    } else {
+      container.innerHTML = entries.map(([uid, sub]) => `
+        <div style="background:#fff; border:1px solid var(--border-subtle); padding:12px 16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; box-shadow:var(--shadow-sm);">
+          <div>
+            <div style="font-weight:700; font-size:14px; color:var(--navy-dark);">${sub.studentName || 'Student ID: ' + uid}</div>
+            <div style="font-size:11px; color:var(--text-muted);">Submitted: ${formatDateTime(sub.submittedAt)}</div>
+            ${sub.notes ? `<div style="font-size:12px; color:var(--navy); margin-top:4px; font-style:italic;">Notes: "${sub.notes}"</div>` : ''}
+          </div>
+          <div>
+            ${sub.attachment ? `
+              <button onclick="downloadOrViewAttachment('${a.id}', 'student', '${uid}')" class="btn btn-outline" style="font-size:11px; padding:6px 12px; width:auto; background:#f0fdf4; border-color:#86efac; color:#15803d; line-height:1;">
+                <i class="fa-solid fa-file-arrow-up"></i> 📤 Student File: ${sub.attachment.name}
+              </button>
+            ` : `<span class="badge badge-deactivated" style="font-size:10px;">No File Attached</span>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('teacherSubmissionsModal').style.display = 'flex';
+  }
+
+  // ── LEAVE REQUESTS (Requirement #3.1) ──
+  function openRequestLeaveModal() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('lModalDate').value = tomorrow.toISOString().split('T')[0];
+    document.getElementById('lModalReason').value = '';
+    document.getElementById('requestLeaveModal').style.display = 'flex';
+  }
+
+  async function submitRequestLeave(e) {
+    e.preventDefault();
+    const date = document.getElementById('lModalDate').value;
+    const reason = document.getElementById('lModalReason').value.trim();
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+
+    if (!user.id) {
+      alert('Session expired. Please log in again.');
+      return;
+    }
+
+    btnLoading('saveLeaveBtn', 'Sending...');
+    showLoader('Sending request...');
+
+    const leave = {
+      id: 'LV-' + Date.now(),
+      date: date,
+      reason: reason,
+      status: 'Pending',
+      requestedAt: new Date().toISOString(),
+      studentId: user.id,
+      studentName: user.fullName || 'Student',
+      studentEmail: user.email,
+      batch: user.batch || 'Unassigned',
+      teacher: user.teacher || 'Unassigned'
+    };
+
+    try {
+      await ygsDB.saveLeave(leave);
+    } catch (_) {} finally {
+      closeOverlay('requestLeaveModal');
+      hideLoader();
+      btnDone('saveLeaveBtn');
+    }
+    alert('Leave request submitted successfully to your assigned instructor!');
+  }
+
+  async function handleLeaveDecision(leaveId, decision) {
+    showLoader('Processing leave request...');
+    try {
+      const leaves = await ygsDB.getAllLeaves();
+      const lv = leaves.find(x => x.id === leaveId);
+      if (lv) {
+        lv.status = decision;
+        await ygsDB.saveLeave(lv);
+        
+        if (decision === 'Approved') {
+          // Add attendance log with status 'Off Day' and approvedLeave: true
+          const attRec = {
+            id: 'ATT-' + Date.now(),
+            studentId: lv.studentId,
+            studentEmail: lv.studentEmail,
+            date: lv.date,
+            status: 'Off Day',
+            approvedLeave: true,
+            markedBy: 'Teacher Leave System',
+            at: new Date().toISOString()
+          };
+          await ygsDB.saveAttendance(attRec);
+        }
+      }
+    } catch(err) {
+      console.warn('Failed to resolve leave decision:', err);
+    } finally {
+      hideLoader();
+    }
+    alert(`Leave request has been ${decision.toLowerCase()}!`);
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+    showTeacher(user).catch(() => {});
+  }
+
+  // ── TEACHER LIVE BATCH ATTENDANCE SHEET (Requirement #3.3) ──
+  let _batchAttStudents = [];
+  function openBatchAttendanceModal() {
+    if (!_teacherStudents || !_teacherStudents.length) {
+      alert('No students currently assigned to your roster/course.');
+      return;
+    }
+
+    _batchAttStudents = _teacherStudents;
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('bAttDateBadge').textContent = 'Date: ' + today;
+    
+    const container = document.getElementById('bAttStudentList');
+    container.innerHTML = _teacherStudents.map(s => `
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background:var(--bg-section); padding:10px 14px; border-radius:8px; border:1px solid var(--border-subtle);">
+        <div>
+          <strong style="font-size:14px; color:var(--navy-dark);">${s.fullName || s.name}</strong>
+          <div style="font-size:11px; color:var(--text-muted);">${s.email} | Batch: <strong>${s.batch || 'Unassigned'}</strong></div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <label style="font-size:12px; font-weight:700; cursor:pointer; padding:6px 10px; border-radius:6px; background:#dcfce7; color:#15803d; border:1px solid #86efac; display:inline-flex; align-items:center; gap:4px; margin:0;">
+            <input type="radio" name="batt_${s.id}" value="Present" checked> Present
+          </label>
+          <label style="font-size:12px; font-weight:700; cursor:pointer; padding:6px 10px; border-radius:6px; background:#fef9c3; color:#a16207; border:1px solid #fde047; display:inline-flex; align-items:center; gap:4px; margin:0;">
+            <input type="radio" name="batt_${s.id}" value="Late"> Late
+          </label>
+          <label style="font-size:12px; font-weight:700; cursor:pointer; padding:6px 10px; border-radius:6px; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; display:inline-flex; align-items:center; gap:4px; margin:0;">
+            <input type="radio" name="batt_${s.id}" value="Absent"> Absent
+          </label>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('batchAttendanceModal').style.display = 'flex';
+  }
+
+  async function submitBatchAttendance(e) {
+    e.preventDefault();
+    if (!_batchAttStudents || !_batchAttStudents.length) return;
+    
+    btnLoading('saveBatchAttBtn', 'Saving...');
+    showLoader('Saving class attendance...');
+
+    const today = new Date().toISOString().split('T')[0];
+    const teacher = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+
+    try {
+      for (const s of _batchAttStudents) {
+        const radios = document.getElementsByName('batt_' + s.id);
+        let status = 'Present';
+        for (const r of radios) {
+          if (r.checked) { status = r.value; break; }
+        }
+
+        const rec = {
+          id: 'ATT-' + s.id + '-' + today,
+          studentId: s.id,
+          studentEmail: s.email,
+          date: today,
+          status: status,
+          markedBy: teacher.fullName || 'Teacher',
+          at: new Date().toISOString()
+        };
+
+        try {
+          await ygsDB.saveAttendance(rec);
+          const ls = JSON.parse(localStorage.getItem('ygs_attendance') || '[]');
+          const idx = ls.findIndex(a => a.id === rec.id);
+          if (idx >= 0) ls[idx] = rec; else ls.push(rec);
+          localStorage.setItem('ygs_attendance', JSON.stringify(ls));
+        } catch(err) {
+          console.warn('Batch attendance save error:', err);
+        }
+      }
+    } finally {
+      closeOverlay('batchAttendanceModal');
+      hideLoader();
+      btnDone('saveBatchAttBtn');
+    }
+
+    alert('Class attendance batch-saved successfully for all assigned students!');
+    
+    showTeacher(teacher).catch(() => {});
+  }
+
+  // ── ONBOARDING TOUR (Requirement #4.2) ──
+  const TOUR_SLIDES = [
+    {
+      title: "1. Welcome & Timezone Synchronization",
+      html: `
+        <div style="text-align:center; margin-bottom:12px;">
+          <i class="fa-solid fa-earth-europe fa-3x" style="color:var(--accent-gold);"></i>
+        </div>
+        <p style="margin-bottom:8px;">Willkommen to the <strong>Young German Scholars (YGS) Portal</strong>!</p>
+        <p>Your academic schedule automatically synchronizes with your local browser timezone. Classes scheduled in Berlin or Karachi convert dynamically to your exact local timing.</p>
+      `
+    },
+    {
+      title: "2. Live Timetables & Class Attendance",
+      html: `
+        <div style="text-align:center; margin-bottom:12px;">
+          <i class="fa-solid fa-calendar-days fa-3x" style="color:var(--green);"></i>
+        </div>
+        <p style="margin-bottom:8px;">Access your weekly class schedule directly from your dashboard banner.</p>
+        <p>Click <strong>Join Live Class</strong> at your batch time to check in and join your instructor's meeting session instantly.</p>
+      `
+    },
+    {
+      title: "3. Homework, Exercises & Leave Requests",
+      html: `
+        <div style="text-align:center; margin-bottom:12px;">
+          <i class="fa-solid fa-file-arrow-up fa-3x" style="color:var(--navy-light);"></i>
+        </div>
+        <p style="margin-bottom:8px;">View homework assignments with downloadable PDF/Word attachments and upload your work for grading.</p>
+        <p>Unlock course study sheets as your batch progresses or submit leave requests if you are away.</p>
+      `
+    },
+    {
+      title: "4. AI Portal Assistant & Academic Helpline",
+      html: `
+        <div style="text-align:center; margin-bottom:12px;">
+          <i class="fa-solid fa-headset fa-3x" style="color:var(--accent-gold);"></i>
+        </div>
+        <p style="margin-bottom:8px;">Need help navigating? Click the floating <strong>AI Assistant Bot</strong> icon at the bottom right corner anytime.</p>
+        <p>For admissions and urgent support, call our helpline: <strong>+92 303 5580150</strong>.</p>
+      `
+    }
+  ];
+
+  let _currentTourStep = 0;
+  function startOnboardingTour() {
+    _currentTourStep = 0;
+    renderTourSlide();
+    document.getElementById('onboardingTourModal').style.display = 'flex';
+  }
+
+  function renderTourSlide() {
+    const slide = TOUR_SLIDES[_currentTourStep];
+    document.getElementById('tourTitle').textContent = slide.title;
+    document.getElementById('tourStepBadge').textContent = `Step ${_currentTourStep + 1} of ${TOUR_SLIDES.length}`;
+    document.getElementById('tourContent').innerHTML = slide.html;
+    
+    document.getElementById('tourPrevBtn').style.display = _currentTourStep === 0 ? 'none' : 'inline-flex';
+    const nextBtn = document.getElementById('tourNextBtn');
+    if (_currentTourStep === TOUR_SLIDES.length - 1) {
+      nextBtn.innerHTML = '<i class="fa-solid fa-check"></i> Complete Tour';
+      nextBtn.onclick = finishTour;
+    } else {
+      nextBtn.innerHTML = '<i class="fa-solid fa-arrow-right"></i> Next';
+      nextBtn.onclick = () => navigateTour(1);
+    }
+  }
+
+  function navigateTour(dir) {
+    _currentTourStep += dir;
+    if (_currentTourStep < 0) _currentTourStep = 0;
+    if (_currentTourStep >= TOUR_SLIDES.length) {
+      finishTour();
+      return;
+    }
+    renderTourSlide();
+  }
+
+  async function finishTour() {
+    closeOverlay('onboardingTourModal');
+    const user = JSON.parse(sessionStorage.getItem('ygs_user') || '{}');
+    if (user.id) {
+      user.isFirstLogin = false;
+      sessionStorage.setItem('ygs_user', JSON.stringify(user));
+      try { await ygsDB.saveUser(user); } catch(_) {}
+    }
+  }
+
+  // ============================================================
+  //  YGS PORTAL ASSISTANT HELPER BOT (Requirement #1)
+  // ============================================================
+  function toggleYgsBot() {
+    const win = document.getElementById('ygsBotWindow');
+    const isHidden = win.style.display === 'none' || !win.style.display;
+    win.style.display = isHidden ? 'flex' : 'none';
+  }
+
+  const BOT_GUIDES = {
+    approve: {
+      q: "How to approve students?",
+      a: `<strong>To approve a student:</strong><br>
+          1. Navigate to the <strong>Pending Approvals</strong> tab on your dashboard.<br>
+          2. Locate the student and click the green <strong>Approve &amp; Assign</strong> button.<br>
+          3. Select their assigned Batch from the dropdown. This will automatically pre-fill their instructor, schedule, and live meeting link.<br>
+          4. Click <strong>Save to Database</strong>. The student's account is now approved and they can log in.`
+    },
+    schedule: {
+      q: "Setting batch schedules?",
+      a: `<strong>To create or configure a batch schedule:</strong><br>
+          1. Go to the <strong>Batches &amp; Classes</strong> tab.<br>
+          2. Click <strong>Add Batch</strong> to open the scheduler.<br>
+          3. Check the weekdays classes are held (Saturday and Sunday can also be checked).<br>
+          4. Select if all days share the same class time (using a single global picker) or if days have different times.<br>
+          5. Set the late check-in limit (in minutes) and save. Timetables will render automatically for teachers and students.`
+    },
+    teacher: {
+      q: "Assigning batches to teachers?",
+      a: `<strong>To assign one or multiple batches to a teacher:</strong><br>
+          1. Go to the <strong>Faculty Teachers</strong> tab.<br>
+          2. Click the <strong>Edit</strong> button next to the teacher.<br>
+          3. In the checklist, check the boxes of all the batches you want to assign to this teacher.<br>
+          4. Click <strong>Save Teacher</strong>. The system will update the teacher's profile and synchronize the Instructor field on all assigned batches automatically.`
+    },
+    homework: {
+      q: "Grading homework/marks?",
+      a: `<strong>To grade student homework assignments:</strong><br>
+          1. In the student list, click <strong>Profile</strong> next to the student's name. This opens their academic profile in a new tab.<br>
+          2. Go to the <strong>Homework &amp; Marks</strong> tab.<br>
+          3. Locate the assignment card and enter the marks obtained, total possible marks, and teacher remarks/feedback.<br>
+          4. Click <strong>Save</strong>. The student's overall GPA/average grade recalculates instantly.`
+    },
+    attendance: {
+      q: "Live class &amp; auto-attendance?",
+      a: `<strong>How the attendance system works:</strong><br>
+          • <strong>Student Check-in:</strong> Students mark attendance by clicking <strong>Join Live Class</strong> on their dashboard before opening the link.<br>
+          • <strong>Auto-Late:</strong> Checked-in times past the batch's late limit are automatically recorded as <strong>Late</strong> (🟡).<br>
+          • <strong>Auto-Absent:</strong> Missing check-ins for past class days or today's finished classes are automatically flagged as <strong>Absent</strong> (🔴) on calendars and stats.<br>
+          • <strong>Teacher Off Days:</strong> Teachers/admins can mark a day as 'Teacher Off Day' (⚫) directly on the student calendar if classes were cancelled.`
+    }
+  };
+
+  window.toggleYgsBot = toggleYgsBot;
+  window.triggerBotGuide = triggerBotGuide;
+  window.submitBotMessage = submitBotMessage;
+
+  function triggerBotGuide(guideKey) {
+    const guide = BOT_GUIDES[guideKey];
+    if (!guide) return;
+    addBotChatMessage('user', guide.q);
+    setTimeout(() => {
+      addBotChatMessage('bot', guide.a);
+    }, 300);
+  }
+
+  function addBotChatMessage(sender, htmlContent) {
+    const area = document.getElementById('ygsBotMessages');
+    const msg = document.createElement('div');
+    
+    if (sender === 'user') {
+      msg.style.cssText = "background:var(--navy); color:#fff; border-radius:12px; padding:10px 14px; align-self:flex-end; max-width:85%; box-shadow:0 1px 2px rgba(0,0,0,0.05);";
+    } else {
+      msg.style.cssText = "background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; align-self:flex-start; max-width:85%; color:var(--navy); box-shadow:0 1px 2px rgba(0,0,0,0.05);";
+    }
+    
+    msg.innerHTML = htmlContent;
+    area.appendChild(msg);
+    area.scrollTop = area.scrollHeight;
+  }
+
+  function submitBotMessage(e) {
+    e.preventDefault();
+    const input = document.getElementById('ygsBotInput');
+    const text = input.value.trim();
+    if (!text) return;
+    
+    addBotChatMessage('user', escHtml(text));
+    input.value = '';
+    
+    // Simple Keyword matching algorithm (bot reply)
+    setTimeout(() => {
+      const q = text.toLowerCase();
+      let reply = "";
+      
+      if (q.includes('approve') || q.includes('enroll') || q.includes('pending') || q.includes('student')) {
+        reply = BOT_GUIDES.approve.a;
+      } else if (q.includes('schedule') || q.includes('time') || q.includes('timetable') || q.includes('calendar') || q.includes('off day') || q.includes('saturday') || q.includes('sunday')) {
+        reply = BOT_GUIDES.schedule.a;
+      } else if (q.includes('teacher') || q.includes('faculty') || q.includes('assign batch') || q.includes('assign teacher')) {
+        reply = BOT_GUIDES.teacher.a;
+      } else if (q.includes('homework') || q.includes('grade') || q.includes('mark') || q.includes('assignment') || q.includes('gpa')) {
+        reply = BOT_GUIDES.homework.a;
+      } else if (q.includes('attendance') || q.includes('absent') || q.includes('late') || q.includes('present') || q.includes('check-in')) {
+        reply = BOT_GUIDES.attendance.a;
+      } else if (q.includes('password') || q.includes('credentials') || q.includes('login') || q.includes('signin')) {
+        reply = `<strong>To update passwords:</strong><br>
+                 • <strong>For Students:</strong> Go to the <strong>All Students</strong> list, click <strong>Edit</strong>, enter the new password in the input field, and click Save.<br>
+                 • <strong>For Teachers:</strong> Go to the <strong>Faculty Teachers</strong> list, click <strong>Edit</strong>, update their password, and save.`;
+      } else if (q.includes('receipt') || q.includes('file') || q.includes('fee') || q.includes('upload')) {
+        reply = `<strong>To view fee receipts:</strong><br>
+                 1. In the student pending or approved list, locate the <strong>Fee Receipt</strong> column.<br>
+                 2. Click the file name link. If it is an image, it opens in a modal; if it's a PDF, it downloads.<br>
+                 3. If the file is missing (e.g., legacy or offline registration), you can upload a receipt file directly by clicking the link!`;
+      } else {
+        reply = `I couldn't find a specific match for your question. You can use the quick buttons above to view guides on <strong>Approving Students</strong>, <strong>Setting Batch Schedules</strong>, <strong>Assigning Teachers</strong>, <strong>Grading Homework</strong>, or <strong>Attendance</strong>.`;
+      }
+      addBotChatMessage('bot', reply);
+    }, 450);
+  }
+
+  // ============================================================
+  //  UTILITIES
+  // ============================================================
+  function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+  }
+  function closeOverlay(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+</script>
+</body>
+</html>

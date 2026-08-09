@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Registration & Profile Builder | YourGermanSchool (YGS)</title>
+  <meta name="description" content="Official Student Onboarding and Profile Registration Portal for YourGermanSchool (YGS). Enroll in accredited German language courses (A1 - C1)." />
+  
+  <!-- Premium Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --navy-dark: #0f172a;
+      --navy-primary: #1e293b;
+      --navy-light: #334155;
+      --accent-gold: #c59b27;
+      --accent-gold-hover: #b0891e;
+      --accent-red: #991b1b;
+      --whatsapp-green: #15803d;
+      
+      --bg-page: #f8fafc;
+      --bg-section: #f1f5f9;
+      --bg-card: #ffffff;
+      
+      --text-heading: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .german-accent-strip {
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, #000000 0%, #991b1b 50%, #c59b27 100%);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .top-bar {
+      background-color: var(--navy-dark);
+      color: #cbd5e1;
+      font-size: 13px;
+      padding: 8px 0;
+    }
+
+    .top-bar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header {
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      height: 48px;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--navy-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .nav-pill-active {
+      background: var(--navy-dark);
+      color: #ffffff !important;
+      padding: 8px 18px;
+      border-radius: 20px;
+    }
+
+    .registration-section {
+      padding: 50px 0 80px;
+    }
+
+    .registration-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+    }
+
+    .form-header {
+      border-bottom: 2px solid var(--bg-section);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--navy-dark);
+      margin-bottom: 6px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-input, .form-select {
+      padding: 12px 16px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--navy-dark);
+      outline: none;
+    }
+
+    .file-dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: 8px;
+      padding: 28px;
+      text-align: center;
+      background: var(--bg-section);
+      cursor: pointer;
+    }
+
+    .file-preview {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      color: #166534;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-navy {
+      background: var(--navy-dark);
+      color: #ffffff;
+    }
+
+    .status-card {
+      display: none;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .status-badge-pending {
+      display: inline-block;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      background-color: var(--navy-dark);
+      color: #cbd5e1;
+      padding: 50px 0 30px;
+      border-top: 3px solid var(--accent-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="german-accent-strip"></div>
+
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div><i class="fa-solid fa-phone" style="color: var(--accent-gold);"></i> Admissions Helpline: +92 303 5580150</div>
+      <div><i class="fa-solid fa-graduation-cap" style="color: var(--accent-gold);"></i> Official Student Registration Portal</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="ygs_logo.png" alt="YGS Logo" class="brand-logo-img" />
+        <div>
+          <div class="brand-title">YourGermanSchool</div>
+          <span class="brand-subtitle">Let's Communicate • A1 - B2</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html#about">About YGS</a></li>
+        <li><a href="index.html#programs">Courses</a></li>
+        <li><a href="practice.html">Practice Hub</a></li>
+        <li><a href="register.html" class="nav-pill-active"><i class="fa-solid fa-user-plus"></i> Student Registration</a></li>
+        <li><a href="portal.html"><i class="fa-solid fa-right-to-bracket"></i> Portal Login</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="registration-section">
+    <div class="container">
+
+      <!-- Form View -->
+      <div class="registration-card" id="registrationFormCard">
+        <div class="form-header">
+          <h1 class="form-title">Student Profile Registration</h1>
+          <p style="color: var(--text-muted);">Fill out your information and attach your fee payment receipt. Your application will be sent for Super Admin Approval.</p>
+        </div>
+
+        <form id="studentRegistrationForm" onsubmit="handleRegistrationSubmit(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-user" style="color: var(--accent-gold);"></i> Full Name *</label>
+              <input type="text" id="fullName" class="form-input" placeholder="e.g. Ayesha Khan" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-envelope" style="color: var(--accent-gold);"></i> Email Address *</label>
+              <input type="email" id="emailAddr" class="form-input" placeholder="e.g. ayesha.khan@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-lock" style="color: var(--accent-gold);"></i> Account Password *</label>
+              <input type="password" id="passwordVal" class="form-input" placeholder="Create portal password" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-phone" style="color: var(--accent-gold);"></i> Contact Number *</label>
+              <input type="tel" id="contactNumber" class="form-input" placeholder="+92 300 1234567" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook Profile URL</label>
+              <input type="url" id="fbProfile" class="form-input" placeholder="https://facebook.com/username" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-brands fa-instagram" style="color: #e4405f;"></i> Instagram Profile URL</label>
+              <input type="url" id="instaProfile" class="form-input" placeholder="https://instagram.com/username" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i> LinkedIn Profile URL</label>
+              <input type="url" id="linkedinProfile" class="form-input" placeholder="https://linkedin.com/in/username" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-brain" style="color: var(--accent-gold);"></i> Previous German Knowledge</label>
+              <select id="previousKnowledge" class="form-select">
+                <option value="None">None (Complete Beginner)</option>
+                <option value="A1 Elementary">A1 Elementary Completed</option>
+                <option value="A2 Intermediate">A2 Intermediate Completed</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label"><i class="fa-solid fa-graduation-cap" style="color: var(--accent-gold);"></i> Intended Course Selection *</label>
+              <select id="intendedCourse" class="form-select" required>
+                <option value="German A1 - Foundational">German A1 - Foundational (Beginner)</option>
+                <option value="German A2 - Elementary">German A2 - Elementary</option>
+                <option value="German B1 - Intermediate">German B1 - Intermediate (Goethe Prep)</option>
+                <option value="German B2 - Advanced Professional">German B2 - Advanced Professional</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label class="form-label"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--accent-gold);"></i> Upload Proof of Fee Payment (PDF, JPG, PNG) *</label>
+              <div class="file-dropzone" onclick="document.getElementById('feeProofInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 32px; color: var(--navy-light); margin-bottom: 8px;"></i>
+                <div style="font-weight: 700; color: var(--navy-dark);">Click or Drag & Drop Fee Payment Receipt</div>
+                <input type="file" id="feeProofInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelect(this)" required />
+              </div>
+              <div id="filePreviewBox" class="file-preview"></div>
+            </div>
+          </div>
+
+          <div style="text-align: right; margin-top: 30px;">
+            <button type="submit" id="regSubmitBtn" class="btn btn-navy">
+              <i class="fa-solid fa-paper-plane"></i> Submit Application & Profile
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Pending Status Display Card -->
+      <div class="status-card" id="statusCard">
+        <div class="status-badge-pending"><i class="fa-solid fa-hourglass-half"></i> Application Status: PENDING ADMIN APPROVAL</div>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy-dark); margin-bottom: 10px;">Registration Submitted, <span id="confirmStudentName">Student</span>!</h2>
+        <p style="color: var(--text-muted); max-width: 650px; margin: 0 auto 20px;">Your registration details and fee payment receipt have been sent to administration. <strong>You cannot log in until Super Admin approves your application.</strong></p>
+
+        <div style="background: var(--bg-section); padding: 20px; border-radius: 8px; max-width: 550px; margin: 0 auto 24px; text-align: left;">
+          <div><strong>Student Email:</strong> <span id="confirmEmail">email@example.com</span></div>
+          <div><strong>Selected Course:</strong> <span id="confirmCourse">German A1</span></div>
+          <div><strong>Uploaded Receipt:</strong> <span id="confirmFileName" style="color: var(--whatsapp-green); font-weight: 600;">receipt.pdf</span></div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="portal.html" class="btn btn-navy" style="width: auto; padding: 12px 28px;"><i class="fa-solid fa-right-to-bracket"></i> Go to Portal Login</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display: flex; justify-content: space-between;">
+      <div>&copy; 2026 YourGermanSchool (YGS). All rights reserved.</div>
+      <div>Admissions Helpline: +92 303 5580150</div>
+    </div>
+  </footer>
+
+  <!-- Loader overlay -->
+  <div id="regLoader" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(3px);">
+    <div style="background:#fff;border-radius:12px;padding:28px 36px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 20px 30px rgba(0,0,0,.15);">
+      <div style="width:44px;height:44px;border:4px solid #e2e8f0;border-top-color:#0f172a;border-radius:50%;animation:spin .75s linear infinite;"></div>
+      <div style="font-weight:700;font-size:14px;color:#0f172a;" id="regLoaderText">Please wait...</div>
+    </div>
+  </div>
+  <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+
+  <script src="ygs_database.js"></script>
+  <script>
+    function showRegLoader(msg) { document.getElementById('regLoaderText').textContent = msg || 'Please wait...'; document.getElementById('regLoader').style.display = 'flex'; }
+    function hideRegLoader() { document.getElementById('regLoader').style.display = 'none'; }
+    function regBtnLoading() { const b = document.getElementById('regSubmitBtn'); b.disabled = true; b._orig = b.innerHTML; b.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;"></span> Submitting...'; }
+    function regBtnDone() { const b = document.getElementById('regSubmitBtn'); b.disabled = false; if (b._orig) b.innerHTML = b._orig; }
+    function handleFileSelect(input) {
+      const previewBox = document.getElementById('filePreviewBox');
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        previewBox.style.display = 'block';
+        previewBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> Attached: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)`;
+      }
+    }
+
+    async function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      regBtnLoading();
+      showRegLoader('Submitting your application...');
+      const name     = document.getElementById('fullName').value.trim();
+      const email    = document.getElementById('emailAddr').value.trim().toLowerCase();
+      const pass     = document.getElementById('passwordVal').value.trim();
+      const phone    = document.getElementById('contactNumber').value.trim();
+      const course   = document.getElementById('intendedCourse').value;
+      const fileInput = document.getElementById('feeProofInput');
+      
+      let fileName = 'payment_receipt.pdf';
+      let fileData = null;
+      
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        fileName = file.name;
+        try {
+          fileData = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => resolve(event.target.result);
+            reader.onerror = (err) => reject(err);
+            reader.readAsDataURL(file);
+          });
+        } catch (err) {
+          console.warn('Failed to read file:', err);
+        }
+      }
+
+      // Wait for DB ready
+      await ygsDB.ready;
+
+      // Check if email already registered
+      await new Promise(r => setTimeout(r, 500)); // brief visual delay
+      const existing = await ygsDB.getUserByEmail(email);
+      let targetId = 'STU-' + Date.now();
+      if (existing) {
+        if (existing.status === 'PENDING') {
+          targetId = existing.id; // Overwrite/update the pending application
+        } else {
+          hideRegLoader();
+          regBtnDone();
+          alert('This email is already registered. Please login or use a different email.');
+          return;
+        }
+      }
+
+      // Save directly to IndexedDB — no localStorage
+      const newStudent = {
+        id:           targetId,
+        fullName:     name,
+        email:        email,
+        password:     pass,
+        role:         'STUDENT',
+        phone:        phone,
+        course:       course,
+        paymentProof: fileName,
+        paymentProofData: fileData,
+        status:       'PENDING',
+        batch:        '',
+        teacher:      '',
+        schedule:     '',
+        meetLink:     '',
+        attendance:   '100%',
+        teacherRemark: '',
+        createdAt:    new Date().toISOString()
+      };
+
+      await ygsDB.saveUser(newStudent);
+
+      hideRegLoader();
+      regBtnDone();
+
+      // Show success card
+      document.getElementById('regFormCard').style.display = 'none';
+      document.getElementById('statusCard').style.display  = 'block';
+      document.getElementById('confirmStudentName').textContent = name;
+      document.getElementById('confirmEmail').textContent       = email;
+      document.getElementById('confirmCourse').textContent      = course;
+      document.getElementById('confirmFileName').textContent    = fileName;
+    }
+  </script>
+</body>
+</html>

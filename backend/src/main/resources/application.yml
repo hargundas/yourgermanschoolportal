@@ -1,0 +1,25 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: ygs-backend-api
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ygs_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:ygs_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:ygs_secret_pass_2026}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+ygs:
+  jwt:
+    secret: 9a4f2c8d7e1b3a5f6c8e0d2b4a6f8c1d3e5b7a9f0c2d4e6f8a1b3c5d7e9f0a2b
+    expiration-ms: 86400000 # 24 Hours

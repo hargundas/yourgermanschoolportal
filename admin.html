@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Admin Security Portal | YourGermanSchool (YGS)</title>
+  <meta name="description" content="Super Admin Portal for YourGermanSchool (YGS). Approve student enrollments, create teacher profiles, assign batches, and manage website CMS." />
+  
+  <!-- Premium Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --navy-dark: #0f172a;
+      --navy-primary: #1e293b;
+      --navy-light: #334155;
+      --accent-gold: #c59b27;
+      --accent-red: #991b1b;
+      --whatsapp-green: #15803d;
+      
+      --bg-page: #f8fafc;
+      --bg-section: #f1f5f9;
+      --bg-card: #ffffff;
+      
+      --text-heading: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .german-accent-strip {
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, #000000 0%, #991b1b 50%, #c59b27 100%);
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      height: 44px;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-navy {
+      background: var(--navy-dark);
+      color: #ffffff;
+    }
+
+    .btn-navy:hover {
+      background: var(--navy-light);
+    }
+
+    .btn-success {
+      background: var(--whatsapp-green);
+      color: #ffffff;
+    }
+
+    .login-container {
+      padding: 80px 0;
+    }
+
+    .login-card {
+      max-width: 420px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      padding: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .alert-error {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-layout {
+      display: none;
+      padding: 40px 0 80px;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .metric-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .metric-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .section-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 28px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--bg-section);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--navy-dark);
+    }
+
+    .table-custom {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .table-custom th {
+      background: var(--navy-dark);
+      color: #ffffff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .table-custom td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    .badge-pending {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .badge-approved {
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 540px;
+      width: 90%;
+      padding: 30px;
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="german-accent-strip"></div>
+
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="ygs_logo.png" alt="YGS Logo" class="brand-logo-img" />
+        <div>
+          <div class="brand-title">YourGermanSchool</div>
+          <span class="brand-subtitle">Super Admin Control Panel</span>
+        </div>
+      </a>
+
+      <div id="adminNavActions" style="display: none;">
+        <span style="font-weight: 700; color: var(--navy-dark); margin-right: 14px;"><i class="fa-solid fa-user-shield" style="color: var(--accent-gold);"></i> Admin Authenticated</span>
+        <button onclick="adminLogout()" class="btn btn-navy" style="font-size: 12px; padding: 6px 14px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Strict Admin Authentication Login Form -->
+  <div class="login-container" id="adminLoginSection">
+    <div class="container">
+      <div class="login-card">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 26px; text-align: center; color: var(--navy-dark); margin-bottom: 8px;">Super Admin Login</h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Enter Super Admin credentials to access management controls.</p>
+
+        <div id="adminAlertBox" class="alert-error"></div>
+
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label class="form-label"><i class="fa-solid fa-envelope"></i> Admin Email</label>
+            <input type="email" id="adminEmail" class="form-input" placeholder="admin@ygs.com" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><i class="fa-solid fa-lock"></i> Admin Password</label>
+            <input type="password" id="adminPassword" class="form-input" placeholder="••••••••" required />
+          </div>
+
+          <button type="submit" class="btn btn-navy" style="width: 100%; justify-content: center; margin-top: 10px;">
+            <i class="fa-solid fa-key"></i> Authenticate Super Admin
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Protected Admin Dashboard View -->
+  <div class="dashboard-layout" id="adminDashboardSection">
+    <div class="container">
+
+      <div class="dashboard-header">
+        <div>
+          <h1 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy-dark);">YGS Institute Management Overview</h1>
+          <p style="color: var(--text-muted); font-size: 13px;">Approve pending student enrollments, assign batches/teachers, and create new teacher profiles.</p>
+        </div>
+        <button onclick="openCreateTeacherModal()" class="btn btn-navy" style="background: var(--accent-gold); color: var(--navy-dark);">
+          <i class="fa-solid fa-user-plus"></i> + Create New Teacher Profile
+        </button>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-val" id="countPendingVal">1</div>
+          <div class="metric-lbl" style="color: #92400e;">Pending Approvals</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val" id="countEnrolledVal">2</div>
+          <div class="metric-lbl" style="color: var(--whatsapp-green);">Approved Students</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val" id="countTeachersVal">2</div>
+          <div class="metric-lbl">Active Faculty Teachers</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-val">A1 - B2</div>
+          <div class="metric-lbl">Active CEFR Courses</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3 class="section-title"><i class="fa-solid fa-hourglass-half" style="color: #d97706;"></i> Pending Student Enrollment Requests</h3>
+          <span style="font-size: 12px; color: var(--text-muted);">Students CANNOT log in until approved here</span>
+        </div>
+
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Student Name & Email</th>
+              <th>Phone</th>
+              <th>Intended Course</th>
+              <th>Fee Proof File</th>
+              <th>Status</th>
+              <th style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="pendingStudentsTableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3 class="section-title"><i class="fa-solid fa-chalkboard-user" style="color: var(--accent-gold);"></i> Faculty Teacher Profiles</h3>
+          <button onclick="openCreateTeacherModal()" class="btn btn-navy" style="font-size: 12px; padding: 6px 14px;"><i class="fa-solid fa-plus"></i> Add Teacher</button>
+        </div>
+
+        <table class="table-custom">
+          <thead>
+            <tr>
+              <th>Teacher Name & Email</th>
+              <th>Qualification</th>
+              <th>Experience</th>
+              <th>Specialization</th>
+              <th>Languages</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="teachersTableBody">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: APPROVE STUDENT & ASSIGN BATCH -->
+  <div class="modal-overlay" id="approveModal">
+    <div class="modal-box">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy-dark); margin-bottom: 12px;">Approve Student Enrollment</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Approving <strong id="modalStudentName">Student Name</strong> will unlock their portal login and send their class credentials.</p>
+
+      <form onsubmit="handleApproveStudentSubmit(event)">
+        <input type="hidden" id="modalStudentId" />
+
+        <div class="form-group">
+          <label class="form-label">Assign Batch Number *</label>
+          <input type="text" id="modalBatchNum" class="form-input" value="YGS-A1-2026-02" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Assign Teacher *</label>
+          <select id="modalTeacherSelect" class="form-select" required>
+            <option value="Dr. Hans Weber">Dr. Hans Weber (Ph.D. German Linguistics)</option>
+            <option value="Clara Schmidt, M.A.">Clara Schmidt, M.A. (TestDaF Specialist)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Class Schedule *</label>
+          <input type="text" id="modalSchedule" class="form-input" value="Monday - Thursday (05:00 PM PST)" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Google Meet / Zoom Meeting Link *</label>
+          <input type="url" id="modalMeetLink" class="form-input" value="https://meet.google.com/ygs-a1-live" required />
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;">
+          <button type="button" onclick="closeApproveModal()" class="btn btn-navy" style="background: var(--bg-section); color: var(--navy-dark);">Cancel</button>
+          <button type="submit" class="btn btn-success"><i class="fa-solid fa-circle-check"></i> Confirm Approval & Activate Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE TEACHER PROFILE -->
+  <div class="modal-overlay" id="createTeacherModal">
+    <div class="modal-box">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--navy-dark); margin-bottom: 12px;">Create New Teacher Profile</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Teacher will be able to log in to the portal using this email and password.</p>
+
+      <form onsubmit="handleCreateTeacherSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="tName" class="form-input" placeholder="e.g. Prof. Markus Wagner" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input type="email" id="tEmail" class="form-input" placeholder="markus.wagner@ygs.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password *</label>
+          <input type="password" id="tPassword" class="form-input" placeholder="Teacher portal password" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Qualification *</label>
+          <input type="text" id="tQual" class="form-input" placeholder="M.A. German Pedagogy" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Specialization</label>
+          <input type="text" id="tSpec" class="form-input" placeholder="A1/A2 Grammar & Phonetics" />
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;">
+          <button type="button" onclick="closeCreateTeacherModal()" class="btn btn-navy" style="background: var(--bg-section); color: var(--navy-dark);">Cancel</button>
+          <button type="submit" class="btn btn-navy"><i class="fa-solid fa-user-plus"></i> Save & Activate Teacher</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function initData() {
+      if (!localStorage.getItem('ygs_students')) {
+        const defaultStudents = [
+          {
+            id: 'STU-101',
+            fullName: 'Ayesha Khan',
+            email: 'ayesha.khan@example.com',
+            password: 'student123',
+            phone: '+92 300 9876543',
+            course: 'German A1 - Foundational',
+            paymentProof: 'payment_receipt_ayesha.pdf',
+            status: 'PENDING',
+            batch: '',
+            teacher: '',
+            schedule: '',
+            meetLink: ''
+          },
+          {
+            id: 'STU-102',
+            fullName: 'Muhammad Ali',
+            email: 'student@ygs.com',
+            password: 'student123',
+            phone: '+92 301 5554321',
+            course: 'German A1 - Foundational',
+            paymentProof: 'payment_receipt_ali.png',
+            status: 'APPROVED',
+            batch: 'YGS-A1-2026-02',
+            teacher: 'Dr. Hans Weber',
+            schedule: 'Mon - Thu (05:00 PM PST)',
+            meetLink: 'https://meet.google.com/ygs-a1-live'
+          }
+        ];
+        localStorage.setItem('ygs_students', JSON.stringify(defaultStudents));
+      }
+
+      if (!localStorage.getItem('ygs_teachers')) {
+        const defaultTeachers = [
+          {
+            id: 'TCH-01',
+            fullName: 'Dr. Hans Weber',
+            email: 'hans.weber@ygs.com',
+            qualification: 'Ph.D. German Linguistics (Heidelberg)',
+            experience: '12 Years',
+            specialization: 'B2/C1 Medical & Technical German',
+            languages: 'German, English, French'
+          },
+          {
+            id: 'TCH-02',
+            fullName: 'Clara Schmidt, M.A.',
+            email: 'clara.schmidt@ygs.com',
+            qualification: 'M.A. TestDaF Pedagogy (Berlin)',
+            experience: '8 Years',
+            specialization: 'A1/A2 Grammar & Phonetics',
+            languages: 'German, English, Spanish'
+          }
+        ];
+        localStorage.setItem('ygs_teachers', JSON.stringify(defaultTeachers));
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initData();
+      if (sessionStorage.getItem('ygs_admin_auth') === 'true') {
+        showAdminDashboard();
+      } else {
+        adminLogout();
+      }
+    });
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('adminPassword').value.trim();
+      const alertBox = document.getElementById('adminAlertBox');
+      alertBox.style.display = 'none';
+
+      // Strict Authentication Validation
+      if (email === 'admin@ygs.com' && pass === 'admin123') {
+        sessionStorage.setItem('ygs_admin_auth', 'true');
+        showAdminDashboard();
+      } else {
+        alertBox.style.display = 'block';
+        alertBox.innerHTML = '🛑 <strong>ACCESS DENIED:</strong> Invalid Admin Email or Password.';
+      }
+    }
+
+    function showAdminDashboard() {
+      document.getElementById('adminLoginSection').style.display = 'none';
+      document.getElementById('adminDashboardSection').style.display = 'block';
+      document.getElementById('adminNavActions').style.display = 'flex';
+      renderDashboard();
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('ygs_admin_auth');
+      document.getElementById('adminLoginSection').style.display = 'block';
+      document.getElementById('adminDashboardSection').style.display = 'none';
+      document.getElementById('adminNavActions').style.display = 'none';
+    }
+
+    function renderDashboard() {
+      const students = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+      const teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+
+      const pending = students.filter(s => s.status === 'PENDING');
+      const approved = students.filter(s => s.status === 'APPROVED');
+
+      document.getElementById('countPendingVal').textContent = pending.length;
+      document.getElementById('countEnrolledVal').textContent = approved.length;
+      document.getElementById('countTeachersVal').textContent = teachers.length;
+
+      // Render Pending Table
+      const pendingTbody = document.getElementById('pendingStudentsTableBody');
+      if (pending.length === 0) {
+        pendingTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">No pending student enrollment applications.</td></tr>`;
+      } else {
+        pendingTbody.innerHTML = pending.map(s => `
+          <tr>
+            <td><strong>${s.fullName}</strong><br><span style="font-size: 11px; color: var(--text-muted);">${s.email}</span></td>
+            <td>${s.phone}</td>
+            <td><span style="background: rgba(197, 155, 39, 0.15); color: var(--navy-dark); padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px;">${s.course}</span></td>
+            <td><a href="#" onclick="alert('Viewing Attachment: ${s.paymentProof}')" style="color: var(--whatsapp-green); font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> ${s.paymentProof}</a></td>
+            <td><span class="badge-pending">PENDING</span></td>
+            <td style="text-align: center;">
+              <button onclick="openApproveModal('${s.id}', '${s.fullName}')" class="btn btn-success" style="font-size: 11px; padding: 6px 12px;">
+                <i class="fa-solid fa-circle-check"></i> Approve & Assign Batch
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Render Teachers Table
+      const teacherTbody = document.getElementById('teachersTableBody');
+      teacherTbody.innerHTML = teachers.map(t => `
+        <tr>
+          <td><strong>${t.fullName}</strong><br><span style="font-size: 11px; color: var(--text-muted);">${t.email}</span></td>
+          <td>${t.qualification}</td>
+          <td>${t.experience}</td>
+          <td>${t.specialization}</td>
+          <td>${t.languages}</td>
+          <td><span class="badge-approved">ACTIVE FACULTY</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function openApproveModal(id, name) {
+      document.getElementById('modalStudentId').value = id;
+      document.getElementById('modalStudentName').textContent = name;
+      document.getElementById('approveModal').style.display = 'flex';
+    }
+
+    function closeApproveModal() {
+      document.getElementById('approveModal').style.display = 'none';
+    }
+
+    function handleApproveStudentSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('modalStudentId').value;
+      const batch = document.getElementById('modalBatchNum').value;
+      const teacher = document.getElementById('modalTeacherSelect').value;
+      const schedule = document.getElementById('modalSchedule').value;
+      const meetLink = document.getElementById('modalMeetLink').value;
+
+      const students = JSON.parse(localStorage.getItem('ygs_students') || '[]');
+      const index = students.findIndex(s => s.id === id);
+      if (index !== -1) {
+        students[index].status = 'APPROVED';
+        students[index].batch = batch;
+        students[index].teacher = teacher;
+        students[index].schedule = schedule;
+        students[index].meetLink = meetLink;
+        localStorage.setItem('ygs_students', JSON.stringify(students));
+      }
+
+      closeApproveModal();
+      renderDashboard();
+      alert(`✅ Enrollment Approved! Student can now log in to portal.html.`);
+    }
+
+    function openCreateTeacherModal() {
+      document.getElementById('createTeacherModal').style.display = 'flex';
+    }
+
+    function closeCreateTeacherModal() {
+      document.getElementById('createTeacherModal').style.display = 'none';
+    }
+
+    function handleCreateTeacherSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('tName').value;
+      const email = document.getElementById('tEmail').value;
+      const qual = document.getElementById('tQual').value;
+      const spec = document.getElementById('tSpec').value;
+
+      const teachers = JSON.parse(localStorage.getItem('ygs_teachers') || '[]');
+      teachers.push({
+        id: 'TCH-' + (teachers.length + 1),
+        fullName: name,
+        email: email,
+        qualification: qual,
+        experience: '5+ Years',
+        specialization: spec || 'German Grammar',
+        languages: 'German, English'
+      });
+      localStorage.setItem('ygs_teachers', JSON.stringify(teachers));
+
+      closeCreateTeacherModal();
+      renderDashboard();
+      alert(`✅ Teacher Profile Created! Teacher can log in using: ${email}`);
+    }
+  </script>
+</body>
+</html>

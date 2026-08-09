@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # 1. MySQL Database Container
+  ygs-db:
+    image: mysql:8.0
+    container_name: ygs-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ygs_db
+      MYSQL_ROOT_PASSWORD: root_password_123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/2_data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Spring Boot Backend Container
+  ygs-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ygs-spring-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://ygs-db:3306/ygs_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root_password_123
+      JWT_SECRET: 9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b
+      JWT_EXPIRATION_MS: 86400000
+    depends_on:
+      ygs-db:
+        condition: service_healthy
+
+  # 3. Next.js Frontend Container
+  ygs-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ygs-nextjs-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api/v1
+    depends_on:
+      - ygs-backend
+
+volumes:
+  mysql_data:

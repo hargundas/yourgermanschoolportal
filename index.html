@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YourGermanSchool (YGS) | Official German Language Institute</title>
+  <meta name="description" content="YourGermanSchool (YGS) - Premier German Language Institute offering accredited A1, A2, B1, B2 courses for university study, nursing, engineering, and career prep. Contact +92 303 5580150." />
+  
+  <!-- Premium Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      /* Executive Color Palette */
+      --navy-dark: #0f172a;       /* Deep Slate Navy */
+      --navy-primary: #1e293b;    /* Primary Brand Navy */
+      --navy-light: #334155;      /* Subtitle Navy */
+      --accent-gold: #c59b27;     /* Formal Academic Gold */
+      --accent-gold-hover: #b0891e;
+      --accent-red: #991b1b;      /* German Heritage Crimson */
+      --whatsapp-green: #15803d;  /* Formal Emerald Green for WhatsApp */
+      --whatsapp-hover: #166534;
+      
+      --bg-page: #f8fafc;        /* Crisp Off-White */
+      --bg-section: #f1f5f9;     /* Slate Light Grey */
+      --bg-card: #ffffff;        /* Pure White Cards */
+      
+      --text-heading: #0f172a;   /* High Contrast Navy Black */
+      --text-body: #334155;      /* Formal Slate Text */
+      --text-muted: #64748b;     /* Muted Grey */
+      --border-subtle: #e2e8f0;  /* Crisp Light Border */
+      --border-strong: #cbd5e1;  /* Strong Border */
+      
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-body);
+      line-height: 1.6;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes floatAnim {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.5); }
+      70% { box-shadow: 0 0 0 16px rgba(21, 128, 61, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
+    }
+
+    @keyframes germanBarGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Decorative German Color Accent Strip */
+    .german-accent-strip {
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, #000000 0%, #991b1b 50%, #c59b27 100%);
+      background-size: 200% 200%;
+      animation: germanBarGradient 6s ease infinite;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Top Utility Bar */
+    .top-bar {
+      background-color: var(--navy-dark);
+      color: #cbd5e1;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .top-bar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar-info {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .top-bar-info item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .top-bar-info i {
+      color: var(--accent-gold);
+    }
+
+    /* Main Navigation Header */
+    header {
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .brand-logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--navy-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.25s ease;
+      letter-spacing: -0.2px;
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--accent-gold);
+      transition: width 0.25s ease;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .nav-menu a:hover {
+      color: var(--accent-gold);
+    }
+
+    .nav-pill {
+      background: rgba(197, 155, 39, 0.12);
+      color: var(--navy-dark) !important;
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(197, 155, 39, 0.3);
+      transition: all 0.3s ease !important;
+    }
+
+    .nav-pill::after {
+      display: none !important;
+    }
+
+    .nav-pill:hover {
+      background: var(--navy-dark);
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-whatsapp-formal {
+      background-color: var(--whatsapp-green);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25);
+    }
+
+    .btn-whatsapp-formal:hover {
+      background-color: var(--whatsapp-hover);
+      box-shadow: 0 8px 20px rgba(21, 128, 61, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-navy {
+      background-color: var(--navy-dark);
+      color: #ffffff;
+    }
+
+    .btn-navy:hover {
+      background-color: var(--navy-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-strong);
+      color: var(--navy-primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-section);
+      border-color: var(--navy-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-section) 100%);
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .institution-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(197, 155, 39, 0.1);
+      border: 1px solid rgba(197, 155, 39, 0.3);
+      border-radius: 4px;
+      color: var(--navy-dark);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .hero-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 46px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      line-height: 1.18;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+      animation: fadeInUp 0.7s ease forwards;
+    }
+
+    .hero-lead {
+      font-size: 17px;
+      color: var(--text-body);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.9s ease forwards;
+    }
+
+    .trust-indicators {
+      display: flex;
+      gap: 30px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: transform 0.25s ease;
+    }
+
+    .trust-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .trust-item i {
+      color: var(--accent-gold);
+      font-size: 18px;
+      margin-top: 2px;
+    }
+
+    .trust-text strong {
+      display: block;
+      color: var(--navy-dark);
+      font-size: 14px;
+    }
+
+    .trust-text span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Admissions Card */
+    .admissions-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-top: 4px solid var(--navy-dark);
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeInScale 0.8s ease forwards;
+      transition: all 0.3s ease;
+    }
+
+    .admissions-card:hover {
+      box-shadow: 0 25px 40px -12px rgba(15, 23, 42, 0.18);
+      transform: translateY(-4px);
+    }
+
+    .card-tag {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 12px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .helpline-box {
+      background: var(--bg-section);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      transition: border-color 0.25s ease;
+    }
+
+    .helpline-box:hover {
+      border-color: var(--accent-gold);
+    }
+
+    .helpline-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .helpline-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      letter-spacing: 0.5px;
+    }
+
+    /* Section Styling */
+    .section {
+      padding: 80px 0;
+    }
+
+    .section-grey {
+      background-color: var(--bg-section);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    /* Program Cards */
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .program-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .program-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent-gold);
+      transform: translateY(-6px);
+    }
+
+    .program-level {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--navy-dark);
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .program-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 10px;
+    }
+
+    .program-desc {
+      font-size: 14px;
+      color: var(--text-body);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .program-features {
+      list-style: none;
+      margin-bottom: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .program-features li {
+      font-size: 13px;
+      color: var(--text-body);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .program-features li i {
+      color: var(--whatsapp-green);
+      font-size: 12px;
+    }
+
+    /* Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--navy-primary);
+    }
+
+    .pillar-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-section);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy-dark);
+      font-size: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .pillar-card:hover .pillar-icon {
+      background: var(--navy-dark);
+      color: var(--accent-gold);
+    }
+
+    .pillar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 10px;
+    }
+
+    .pillar-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Practice CTA Section */
+    .practice-cta-box {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-primary) 100%);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .practice-cta-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(197, 155, 39, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .practice-cta-box:hover {
+      transform: translateY(-4px);
+    }
+
+    .practice-cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .practice-cta-desc {
+      font-size: 15px;
+      color: #cbd5e1;
+      max-width: 600px;
+    }
+
+    /* Floating WhatsApp Button */
+    .floating-whatsapp {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background-color: var(--whatsapp-green);
+      color: #ffffff;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 6px 20px rgba(21, 128, 61, 0.4);
+      text-decoration: none;
+      z-index: 9999;
+      animation: pulseGlow 2.5s infinite;
+      transition: all 0.25s ease;
+    }
+
+    .floating-whatsapp:hover {
+      transform: scale(1.1);
+      background-color: var(--whatsapp-hover);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--navy-dark);
+      color: #cbd5e1;
+      padding: 60px 0 30px;
+      border-top: 3px solid var(--accent-gold);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .footer-column h4 {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-column ul li a:hover {
+      color: var(--accent-gold);
+    }
+
+    .footer-bottom {
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .pillars-grid, .footer-grid, .practice-cta-box {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+      .nav-menu {
+        display: none;
+      }
+      .hero-heading {
+        font-size: 34px;
+      }
+      .top-bar-info {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Decorative German Color Strip -->
+  <div class="german-accent-strip"></div>
+
+  <!-- Top Utility Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-info">
+        <item><i class="fa-solid fa-phone"></i> Admissions Helpline: +92 303 5580150</item>
+        <item><i class="fa-solid fa-location-dot"></i> Accredited German Language Academy</item>
+      </div>
+      <div>
+        <i class="fa-solid fa-certificate" style="color: var(--accent-gold);"></i> Goethe & ÖSD Standard CEFR Curriculum
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header>
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <img src="ygs_logo.png" alt="YGS Logo" class="brand-logo-img" />
+        <div>
+          <div class="brand-title">YourGermanSchool</div>
+          <span class="brand-subtitle">Let's Communicate • A1 - B2</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#about">About YGS</a></li>
+        <li><a href="#programs">Courses</a></li>
+        <li><a href="practice.html" class="nav-pill"><i class="fa-solid fa-laptop-code" style="color: var(--accent-gold);"></i> Practice Hub</a></li>
+        <li><a href="register.html" style="color: var(--accent-gold); font-weight: 700;"><i class="fa-solid fa-user-plus"></i> Student Registration</a></li>
+        <li><a href="portal.html"><i class="fa-solid fa-right-to-bracket"></i> Portal Login</a></li>
+      </ul>
+
+      <a href="register.html" class="btn btn-navy">
+        <i class="fa-solid fa-user-plus"></i> Enroll Now
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="about">
+    <div class="container hero-grid">
+      <div>
+        <div class="institution-badge">
+          <i class="fa-solid fa-graduation-cap"></i> Premier German Language Institute
+        </div>
+        <h1 class="hero-heading">Master German with Precision. Learn German from Experts.</h1>
+        <p class="hero-lead">
+          YourGermanSchool (YGS) delivers accredited, CEFR-compliant German language training (Levels A1 to B2). Tailored for university applicants, healthcare professionals, engineers, and candidates.
+        </p>
+
+        <div class="hero-actions">
+          <a href="register.html" class="btn btn-navy" style="padding: 14px 28px; background: var(--accent-gold); color: var(--navy-dark);">
+            <i class="fa-solid fa-user-plus"></i> Register & Build Profile
+          </a>
+          <a href="https://wa.me/923035580150?text=Hello%20YGS%20Admissions!%20I%20want%20to%20consult%20regarding%20German%20courses." target="_blank" class="btn btn-whatsapp-formal" style="padding: 14px 28px;">
+            <i class="fa-brands fa-whatsapp"></i> Admissions (+92 303 5580150)
+          </a>
+          <a href="practice.html" class="btn btn-outline">
+            <i class="fa-solid fa-laptop-code"></i> Student Practice Hub
+          </a>
+        </div>
+
+        <div class="trust-indicators">
+          <div class="trust-item">
+            <i class="fa-solid fa-award"></i>
+            <div class="trust-text">
+              <strong>Goethe Standard</strong>
+              <span>Exam Prep (A1 - B2)</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <i class="fa-solid fa-users"></i>
+            <div class="trust-text">
+              <strong>Interactive Batches</strong>
+              <span>Personalized Attention</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <i class="fa-solid fa-headset"></i>
+            <div class="trust-text">
+              <strong>Direct Helpline</strong>
+              <span>+92 303 5580150</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formal Admission Contact Card -->
+      <div class="admissions-card" id="admissions">
+        <div class="card-tag">Official Admissions Office</div>
+        <h3 class="card-title">Enrolment & Counseling</h3>
+        <p class="card-desc">Speak directly with our academic advisor to discuss course schedules, Goethe exam preparation, and German language training.</p>
+
+        <div class="helpline-box">
+          <div class="helpline-label">Official Helpline & WhatsApp</div>
+          <div class="helpline-number">+92 303 5580150</div>
+        </div>
+
+        <a href="https://wa.me/923035580150?text=Hello%20YourGermanSchool!%20I%20would%20like%20to%20apply%20for%20admission." target="_blank" class="btn btn-whatsapp-formal" style="width: 100%; justify-content: center; padding: 14px;">
+          <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Connect on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Institutional Pillars Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-subtitle">Academic Excellence</div>
+        <h2 class="section-title">The YourGermanSchool Standard</h2>
+        <p class="section-desc">Our immersive teaching methodology combines formal CEFR grammar frameworks with interactive digital practice tools.</p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+          <h3 class="pillar-title">Standardized CEFR Curriculum</h3>
+          <p class="pillar-desc">Fully structured according to Goethe-Institut, ÖSD, and Telc examination requirements.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <h3 class="pillar-title">Live Interactive Classes</h3>
+          <p class="pillar-desc">Intensive speaking drills, phonetics coaching, and real-time feedback from experienced German linguists.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3 class="pillar-title">Interactive Student Practice</h3>
+          <p class="pillar-desc">Continuous digital exercises, online quizzes, and self-assessment modules for instant learning feedback.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Academic Programs Section -->
+  <section class="section section-grey" id="programs">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-subtitle">Language Levels</div>
+        <h2 class="section-title">Academic Language Programs</h2>
+        <p class="section-desc">From basic introductory skills to professional working proficiency, master German step-by-step.</p>
+      </div>
+
+      <div class="programs-grid">
+        <!-- A1 -->
+        <div class="program-card">
+          <div>
+            <span class="program-level">Level A1 • Beginner</span>
+            <h3 class="program-title">Foundational German</h3>
+            <p class="program-desc">Essential vocabulary, introductions, sentence structure, and telling time (Uhrzeit).</p>
+            <ul class="program-features">
+              <li><i class="fa-solid fa-check"></i> Basic Grammar & Pronunciation</li>
+              <li><i class="fa-solid fa-check"></i> Telling Time (Uhrzeit) Exercises</li>
+              <li><i class="fa-solid fa-check"></i> Goethe A1 Exam Preparation</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/923035580150?text=I%20am%20interested%20in%20enrolling%20in%20the%20A1%20German%20Program" target="_blank" class="btn btn-navy" style="justify-content: center;">Enroll in A1</a>
+        </div>
+
+        <!-- A2 -->
+        <div class="program-card">
+          <div>
+            <span class="program-level">Level A2 • Elementary</span>
+            <h3 class="program-title">Elementary German</h3>
+            <p class="program-desc">Past tenses (Perfekt/Präteritum), accusative & dative cases, and expanded conversational skills.</p>
+            <ul class="program-features">
+              <li><i class="fa-solid fa-check"></i> Advanced Grammar & Cases</li>
+              <li><i class="fa-solid fa-check"></i> Interactive Dialogue & Listening</li>
+              <li><i class="fa-solid fa-check"></i> Goethe A2 Exam Preparation</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/923035580150?text=I%20am%20interested%20in%20enrolling%20in%20the%20A2%20German%20Program" target="_blank" class="btn btn-navy" style="justify-content: center;">Enroll in A2</a>
+        </div>
+
+        <!-- B1 -->
+        <div class="program-card">
+          <div>
+            <span class="program-level">Level B1 • Intermediate</span>
+            <h3 class="program-title">Intermediate German</h3>
+            <p class="program-desc">Prerequisite level for higher education studies and professional careers in German-speaking countries.</p>
+            <ul class="program-features">
+              <li><i class="fa-solid fa-check"></i> Complex Subordinate Clauses</li>
+              <li><i class="fa-solid fa-check"></i> Formal Writing & Email Skills</li>
+              <li><i class="fa-solid fa-check"></i> Full Goethe/ÖSD B1 Mock Exams</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/923035580150?text=I%20am%20interested%20in%20enrolling%20in%20the%20B1%20German%20Program" target="_blank" class="btn btn-navy" style="justify-content: center;">Enroll in B1</a>
+        </div>
+
+        <!-- B2 -->
+        <div class="program-card">
+          <div>
+            <span class="program-level">Level B2 • Advanced</span>
+            <h3 class="program-title">Professional & Medical</h3>
+            <p class="program-desc">Advanced fluency for doctors, nurses, engineers, and master degree candidates.</p>
+            <ul class="program-features">
+              <li><i class="fa-solid fa-check"></i> Technical & Professional Vocabulary</li>
+              <li><i class="fa-solid fa-check"></i> University & Job Interview Training</li>
+              <li><i class="fa-solid fa-check"></i> Complete Goethe Exam Prep & Assessment</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/923035580150?text=I%20am%20interested%20in%20enrolling%20in%20the%20B2%20German%20Program" target="_blank" class="btn btn-navy" style="justify-content: center;">Enroll in B2</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Practice Hub Banner CTA Section -->
+  <section class="section">
+    <div class="container">
+      <div class="practice-cta-box">
+        <div>
+          <h3 class="practice-cta-title"><i class="fa-solid fa-laptop-code" style="color: var(--accent-gold);"></i> YGS Student Practice Hub</h3>
+          <p class="practice-cta-desc">Access our dedicated interactive practice portal. Practice German time expressions (Uhrzeit), vocabulary, grammar, and exam patterns online.</p>
+        </div>
+        <a href="practice.html" class="btn btn-whatsapp-formal" style="background-color: var(--accent-gold); color: var(--navy-dark); padding: 14px 28px; font-weight: 700;">
+          <i class="fa-solid fa-arrow-right"></i> Open Practice Hub Page
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+            <img src="ygs_logo.png" alt="YGS Logo" style="height: 44px; width: auto; background: #ffffff; padding: 4px; border-radius: 4px;" />
+            <div>
+              <h3 style="margin-bottom: 0; line-height: 1.1; color: #fff; font-family: 'Playfair Display', serif;">YourGermanSchool (YGS)</h3>
+              <span style="font-size: 11px; color: var(--accent-gold); font-weight: 700; letter-spacing: 1px;">LET'S COMMUNICATE</span>
+            </div>
+          </div>
+          <p>Official German Language & Career Preparation Institute. Empowering students and professionals with Goethe-standard language fluency for study, medical licensing, and careers in Germany.</p>
+          <p style="color: var(--accent-gold); font-weight: 600;"><i class="fa-solid fa-phone"></i> Admissions Helpline: +92 303 5580150</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Academic Programs</h4>
+          <ul>
+            <li><a href="#programs">A1 Foundational</a></li>
+            <li><a href="#programs">A2 Elementary</a></li>
+            <li><a href="#programs">B1 Intermediate</a></li>
+            <li><a href="#programs">B2 Advanced Professional</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Student Hub</h4>
+          <ul>
+            <li><a href="practice.html">Practice Hub Page</a></li>
+            <li><a href="practice.html">German Time Practice</a></li>
+            <li><a href="#about">About YGS</a></li>
+            <li><a href="#admissions">Admissions Portal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Contact Admissions</h4>
+          <p style="font-size: 13px; color: #94a3b8; margin-bottom: 12px;">Official Enrolment & Student Support:</p>
+          <a href="https://wa.me/923035580150?text=Hello%20YGS!%20I%20am%20contacting%20for%20German%20course%20admissions." target="_blank" class="btn btn-whatsapp-formal" style="width: 100%; justify-content: center;">
+            <i class="fa-brands fa-whatsapp"></i> +92 303 5580150
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 YourGermanSchool (YGS). All rights reserved.</div>
+        <div>Goethe & ÖSD CEFR Standard Compliant</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/923035580150?text=Hello%20YGS!%20I%20want%20to%20inquire%20about%20German%20language%20classes." target="_blank" class="floating-whatsapp" title="Contact Admissions Helpline +92 303 5580150">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+</body>
+</html>
